@@ -36,9 +36,15 @@ Cette commande contrôle les types, la qualité du code et la construction de la
 
 ```text
 app/
-  layout.tsx       Métadonnées et structure générale
-  page.tsx         Page d’accueil
-  globals.css      Identité visuelle et responsive
+  layout.tsx              Métadonnées et structure générale
+  page.tsx                Page d’accueil
+  notre-mission/          Présentation de l’association
+  nos-actions/            Détail des trois formats d’action
+  evenements/             Prochain rendez-vous et formats à venir
+  partenaires/            Propositions de partenariat
+  contact/                Formulaire et informations pratiques
+  globals.css             Identité visuelle et responsive
+components/               En-tête, menu, pied de page et formulaire partagés
 public/            Logo, favicon et images publiques
 .github/           Contrôles automatiques et modèle de pull request
 ```
@@ -58,6 +64,9 @@ Le déploiement est confié à l’intégration Git native de Vercel. Aucun jeto
 | Variable | Rôle | Exemple |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Adresse publique du site, utile pour les futurs liens absolus et le référencement | `https://www.vie-avenir.fr` |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Adresse officielle qui permet au formulaire d’ouvrir un e-mail prérempli | `contact@vie-avenir.fr` |
+
+Tant que `NEXT_PUBLIC_CONTACT_EMAIL` est vide, le formulaire affiche un message transparent indiquant que l’envoi n’est pas encore activé.
 
 Les secrets et les fichiers `.env.local` ne doivent jamais être ajoutés à Git.
 

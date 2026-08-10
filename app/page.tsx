@@ -1,32 +1,11 @@
-const Arrow = () => <span aria-hidden="true">↗</span>;
+import Image from "next/image";
+import Link from "next/link";
+import { Arrow, SiteFooter, SiteHeader } from "@/components/site-shell";
 
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <a className="brand" href="#accueil" aria-label="VIE AVENIR — accueil">
-          {/* Image WebP déjà optimisée : chargement direct pour les deux environnements. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo-vie-avenir.webp"
-            alt="VIE AVENIR — Va et deviens !"
-            width="300"
-            height="200"
-            fetchPriority="high"
-          />
-        </a>
-
-        <nav className="desktop-nav" aria-label="Navigation principale">
-          <a href="#mission">Notre mission</a>
-          <a href="#actions">Nos actions</a>
-          <a href="#partenaires">Partenaires</a>
-          <a href="#contact">Contact</a>
-        </nav>
-
-        <a className="button button-small button-dark" href="#contact">
-          Nous rejoindre <Arrow />
-        </a>
-      </header>
+      <SiteHeader />
 
       <section className="hero" id="accueil">
         <div className="hero-copy">
@@ -40,27 +19,24 @@ export default function Home() {
             projeter.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#actions">
+            <Link className="button button-primary" href="/nos-actions">
               Découvrir nos actions <Arrow />
-            </a>
-            <a className="text-link" href="#partenaires">
+            </Link>
+            <Link className="text-link" href="/partenaires">
               Devenir partenaire <span aria-hidden="true">→</span>
-            </a>
+            </Link>
           </div>
           <p className="hero-signature">Rencontrer. Inspirer. Devenir.</p>
         </div>
 
         <div className="hero-visual" aria-label="Des jeunes échangent avec une professionnelle">
-          {/* Image WebP déjà optimisée : chargement direct pour les deux environnements. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/hero-vie-avenir.webp"
             alt="Jeunes Martiniquais en échange avec une professionnelle"
             width="1672"
             height="941"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
+            priority
+            sizes="(max-width: 900px) 100vw, 50vw"
           />
           <div className="hero-badge badge-top">
             <strong>14—25</strong>
@@ -104,7 +80,7 @@ export default function Home() {
             <p className="card-label">Rencontrer</p>
             <h3>Des professionnels inspirants</h3>
             <p>Des parcours vrais, des métiers racontés autrement et des échanges où toutes les questions ont leur place.</p>
-            <a href="#evenement">Voir les rencontres <span>↗</span></a>
+            <Link href="/evenements">Voir les rencontres <span>↗</span></Link>
           </article>
 
           <article className="action-card card-orange">
@@ -113,7 +89,7 @@ export default function Home() {
             <p className="card-label">Comprendre</p>
             <h3>La vie active, sans mode d’emploi compliqué</h3>
             <p>Fiche de paie, budget, logement, APL, impôts : des ateliers utiles pour devenir autonome avec confiance.</p>
-            <a href="#evenement">Découvrir les ateliers <span>↗</span></a>
+            <Link href="/nos-actions">Découvrir les ateliers <span>↗</span></Link>
           </article>
 
           <article className="action-card card-green">
@@ -122,7 +98,7 @@ export default function Home() {
             <p className="card-label">Prendre la parole</p>
             <h3>La Voix de l’Avenir</h3>
             <p>Un espace pour partager ses idées, faire entendre ses besoins et contribuer aux projets qui concernent la jeunesse.</p>
-            <a href="#contact">Rejoindre l’aventure <span>↗</span></a>
+            <Link href="/contact">Rejoindre l’aventure <span>↗</span></Link>
           </article>
         </div>
       </section>
@@ -161,10 +137,10 @@ export default function Home() {
             <span>Rencontres métiers</span><span>Défis</span><span>Échanges sans tabou</span>
           </div>
         </div>
-        <a className="event-cta" href="#contact">
+        <Link className="event-cta" href="/contact">
           <span>Être informé·e</span>
           <strong>↗</strong>
-        </a>
+        </Link>
       </section>
 
       <section className="partner-section" id="partenaires">
@@ -176,7 +152,7 @@ export default function Home() {
             chaque expérience partagée peut ouvrir une voie que le jeune n’avait
             jamais envisagée.
           </p>
-          <a className="button button-primary" href="#contact">Construire une action ensemble <Arrow /></a>
+          <Link className="button button-primary" href="/contact">Construire une action ensemble <Arrow /></Link>
         </div>
         <div className="partner-choices">
           <article><span>01</span><div><h3>Partager un parcours</h3><p>Intervenir lors d’une rencontre et raconter le vrai quotidien de votre métier.</p></div><strong>↗</strong></article>
@@ -186,42 +162,25 @@ export default function Home() {
       </section>
 
       <section className="contact-section" id="contact">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/logo-vie-avenir.webp"
           alt=""
           aria-hidden="true"
           width="380"
           height="253"
-          loading="lazy"
-          decoding="async"
+          sizes="380px"
         />
         <p className="section-kicker">Prêt·e à faire un pas ?</p>
         <h2>Ton avenir vient<br /><em>juste de t’appeler.</em></h2>
         <p>Jeune, parent, professionnel ou partenaire : l’aventure se construit avec toi.</p>
         <div className="contact-actions">
-          <a className="button button-light" href="#accueil">Je suis un jeune <Arrow /></a>
-          <a className="button button-outline" href="#partenaires">Je veux contribuer <Arrow /></a>
+          <Link className="button button-light" href="/contact">Je suis un jeune <Arrow /></Link>
+          <Link className="button button-outline" href="/partenaires">Je veux contribuer <Arrow /></Link>
         </div>
         <p className="coming-soon">Inscriptions et contact bientôt disponibles</p>
       </section>
 
-      <footer>
-        <a className="footer-brand" href="#accueil">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo-vie-avenir.webp"
-            alt="VIE AVENIR"
-            width="300"
-            height="200"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-        <p>Des rencontres qui changent des trajectoires.</p>
-        <div className="footer-links"><a href="#mission">Mission</a><a href="#actions">Actions</a><a href="#partenaires">Partenaires</a></div>
-        <p className="copyright">© 2026 VIE AVENIR · Martinique</p>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
