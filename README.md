@@ -19,7 +19,7 @@ Prérequis : Node.js 22 et npm.
 ```bash
 npm ci
 cp .env.example .env.local
-npm run dev:vercel
+npm run dev
 ```
 
 Le site est ensuite accessible sur `http://localhost:3000`.
@@ -61,10 +61,11 @@ Le déploiement est confié à l’intégration Git native de Vercel. Aucun jeto
 
 Les secrets et les fichiers `.env.local` ne doivent jamais être ajoutés à Git.
 
-## Deux environnements de construction
+## Commandes principales
 
+- `npm run dev` lance le site en local.
+- `npm run check` vérifie les types, le code et la construction de production.
 - `npm run build:vercel` construit la version Next.js destinée à Vercel.
-- `npm run build` conserve la compatibilité avec l’environnement de prévisualisation du projet.
 
 ## Identité visuelle
 
