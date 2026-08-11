@@ -103,7 +103,7 @@ export default async function Home() {
             <p className="card-label">Prendre la parole</p>
             <h3>La Voix de l’Avenir</h3>
             <p>Un espace pour partager ses idées, faire entendre ses besoins et contribuer aux projets qui concernent la jeunesse.</p>
-            <Link href="/contact">Rejoindre l’aventure <span>↗</span></Link>
+            <Link href="/contact#parcours">Rejoindre l’aventure <span>↗</span></Link>
           </article>
         </div>
       </section>
@@ -140,7 +140,7 @@ export default async function Home() {
             <h2>{nextEvent.title}</h2>
             <p>{nextEvent.summary}</p>
             <div className="event-tags" aria-label="Programme">
-              {nextEvent.program.slice(0, 3).map((item) => <span key={item}>{item}</span>)}
+              {nextEvent.program.slice(0, 3).map((item, index) => <span key={`${item.title}-${index}`}>{item.title}</span>)}
             </div>
           </div>
           <Link className="event-cta" href={`/evenements#${nextEvent.slug}`}>
@@ -159,7 +159,7 @@ export default async function Home() {
             chaque expérience partagée peut ouvrir une voie que le jeune n’avait
             jamais envisagée.
           </p>
-          <Link className="button button-primary" href="/contact">Construire une action ensemble <Arrow /></Link>
+          <Link className="button button-primary" href="/contact?profil=partner#formulaire">Construire une action ensemble <Arrow /></Link>
         </div>
         <div className="partner-choices">
           <article><span>01</span><div><h3>Partager un parcours</h3><p>Intervenir lors d’une rencontre et raconter le vrai quotidien de votre métier.</p></div><strong>↗</strong></article>
@@ -181,10 +181,10 @@ export default async function Home() {
         <h2>Ton avenir vient<br /><em>juste de t’appeler.</em></h2>
         <p>Jeune, parent, professionnel ou partenaire : l’aventure se construit avec toi.</p>
         <div className="contact-actions">
-          <Link className="button button-light" href="/contact">Je suis un jeune <Arrow /></Link>
-          <Link className="button button-outline" href="/partenaires">Je veux contribuer <Arrow /></Link>
+          <Link className="button button-light" href="/contact?profil=young#formulaire">Je suis un jeune <Arrow /></Link>
+          <Link className="button button-outline" href="/contact?profil=professional#formulaire">Je veux contribuer <Arrow /></Link>
         </div>
-        <p className="coming-soon">Inscriptions et contact bientôt disponibles</p>
+        <p className="coming-soon">Demandes et partenariats via notre formulaire de contact</p>
       </section>
 
       <SiteFooter />

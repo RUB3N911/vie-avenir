@@ -16,6 +16,7 @@ export function AssociationForm({ settings }: { settings: AssociationSettings })
         <div className="admin-form-card-heading"><span>01</span><div><h2>Identité officielle</h2><p>Ces données alimenteront progressivement le site et ses pages légales.</p></div></div>
         <div className="admin-fields-grid">
           <label className="admin-field admin-field-wide"><span>Nom de l’association <b>*</b></span><input name="legal_name" defaultValue={settings.legal_name} required /></label>
+          <label className="admin-field"><span>Statut de l’association</span><input name="association_status" defaultValue={settings.association_status ?? ""} placeholder="Ex. Association loi 1901" /></label>
           <label className="admin-field"><span>Numéro RNA</span><input name="rna_number" defaultValue={settings.rna_number ?? ""} placeholder="W9…" /></label>
           <label className="admin-field"><span>Adresse e-mail publique</span><input name="public_email" type="email" defaultValue={settings.public_email ?? ""} placeholder="contact@…" /></label>
           <label className="admin-field admin-field-wide"><span>Adresse du siège</span><input name="address" defaultValue={settings.address ?? ""} /></label>

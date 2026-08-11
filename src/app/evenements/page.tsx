@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
+import { defaultProgram } from "@/data/cms-defaults";
 import { formatEventDate, getPublishedEvents, pickNextEvent } from "@/lib/cms-data";
 import type { EventRecord } from "@/lib/cms-types";
 
@@ -33,7 +34,7 @@ function EventAction({ event, className }: { event: EventRecord; className: stri
   if (event.registration_status === "open" && event.registration_url) {
     return <a className={className} href={event.registration_url} target="_blank" rel="noreferrer">{label} <Arrow /></a>;
   }
-  return <Link className={className} href="/contact">{label} <Arrow /></Link>;
+  return <Link className={className} href="/contact?profil=young#formulaire">{label} <Arrow /></Link>;
 }
 
 export default async function EventsPage() {
@@ -42,7 +43,7 @@ export default async function EventsPage() {
   const date = nextEvent ? formatEventDate(nextEvent.starts_at) : null;
   const program = nextEvent?.program.length
     ? nextEvent.program.slice(0, 4)
-    : ["Rencontrer", "Questionner", "Essayer", "Repartir avec une prochaine étape"];
+    : defaultProgram;
 
   return (
     <main>
@@ -72,11 +73,11 @@ export default async function EventsPage() {
             <SectionLabel>Au programme</SectionLabel>
             <h2>Un atelier qui bouge avec toi.</h2>
             <ol className="event-steps">
-              {program.map((title, index) => (
-                <li className={`tone-${tones[index]}`} key={`${title}-${index}`}>
+              {program.map((item, index) => (
+                <li className={`tone-${tones[index]}`} key={`${item.title}-${index}`}>
                   <strong>{index + 1}</strong>
-                  <h3>{title}</h3>
-                  <p>{index === 0 ? "Des parcours vrais et des rencontres accessibles." : index === 1 ? "Sans filtre et sans mauvaise question." : index === 2 ? "Des activités et des mises en situation concrètes." : "Des idées plus claires et une action à tenter."}</p>
+                  <h3>{item.title}</h3>
+                  {item.description ? <p>{item.description}</p> : null}
                 </li>
               ))}
             </ol>
@@ -121,7 +122,7 @@ export default async function EventsPage() {
             {formats.map(([title, text, tone]) => (
               <article className={`format-card tone-${tone}`} key={title}>
                 <p>À découvrir</p><h3>{title}</h3><span>{text}</span>
-                <Link href="/contact">Être informé·e <b aria-hidden="true">→</b></Link>
+                <Link href="/contact?profil=young#formulaire">Être informé·e <b aria-hidden="true">→</b></Link>
               </article>
             ))}
           </div>
@@ -142,7 +143,7 @@ export default async function EventsPage() {
         </section>
       ) : null}
 
-      <Callout eyebrow="Ne manque pas le prochain rendez-vous" title="Ton avenir vient de t’appeler." buttonLabel="Je reste informé·e" href="/contact" />
+      <Callout eyebrow="Ne manque pas le prochain rendez-vous" title="Ton avenir vient de t’appeler." buttonLabel="Je reste informé·e" href="/contact?profil=young#formulaire" />
       <SiteFooter />
     </main>
   );

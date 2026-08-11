@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
+import { getPublishedPartners } from "@/lib/cms-data";
 
 export const metadata: Metadata = {
   title: "Partenaires",
@@ -22,7 +23,8 @@ const contributions = [
   ["04", "Un soutien", "Aider l’association à déployer du matériel, des formats et de nouveaux rendez-vous."],
 ] as const;
 
-export default function PartnersPage() {
+export default async function PartnersPage() {
+  const confirmedPartners = await getPublishedPartners();
   return (
     <main>
       <SiteHeader activePath="/partenaires" />
@@ -32,7 +34,7 @@ export default function PartnersPage() {
           <h1>Ensemble, ouvrons le champ des possibles.</h1>
           <p>Entreprises, collectivités, professionnels et associations : votre expérience, vos lieux, vos réseaux ou votre soutien peuvent provoquer un vrai déclic.</p>
           <div className="hero-actions">
-            <Link className="button button-primary" href="/contact">Construisons une action <Arrow /></Link>
+            <Link className="button button-primary" href="/contact?profil=partner#formulaire">Construisons une action <Arrow /></Link>
           </div>
         </div>
         <div className="page-photo page-photo-right">
@@ -85,11 +87,13 @@ export default function PartnersPage() {
         <div><strong>Collectif</strong><span>Des liens qui durent</span></div>
       </section>
 
+      {confirmedPartners.length ? <section className="page-section confirmed-partners-section"><div className="page-container"><SectionLabel>Ils avancent avec nous</SectionLabel><h2>Nos premiers partenaires confirmés.</h2><div className="confirmed-partner-grid">{confirmedPartners.map((partner) => { const content = <>{partner.logo_url ? <Image src={partner.logo_url} alt={`Logo ${partner.name}`} width={220} height={120} /> : <strong>{partner.name}</strong>}<div><p>{partner.category}</p><h3>{partner.name}</h3>{partner.description ? <span>{partner.description}</span> : null}</div></>; return partner.website_url ? <a href={partner.website_url} target="_blank" rel="noreferrer" key={partner.id}>{content}</a> : <article key={partner.id}>{content}</article>; })}</div></div></section> : null}
+
       <Callout
         eyebrow="Une idée ? Un lieu ? Une compétence à partager ?"
         title="Construisons l’action qui vous ressemble."
         buttonLabel="Devenir partenaire"
-        href="/contact"
+        href="/contact?profil=partner#formulaire"
       />
       <SiteFooter />
     </main>

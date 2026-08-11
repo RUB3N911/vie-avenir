@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
+import { contactJourneys, contactProfiles } from "@/data/contact-journeys";
 import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 import { getAssociationSettings } from "@/lib/cms-data";
+import type { ContactProfile } from "@/lib/cms-types";
 
 export const metadata: Metadata = {
   title: "Nous rejoindre",
@@ -11,14 +13,9 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const audiences = [
-  ["Tu as 14—25 ans", "Participer, poser une question ou proposer une idée.", "pink"],
-  ["Vous êtes professionnel", "Partager votre parcours ou votre métier.", "orange"],
-  ["Vous représentez une structure", "Imaginer un partenariat ou accueillir une action.", "green"],
-] as const;
-
-export default async function ContactPage() {
-  const settings = await getAssociationSettings();
+export default async function ContactPage({ searchParams }: { searchParams: Promise<{ profil?: string }> }) {
+  const [settings, query] = await Promise.all([getAssociationSettings(), searchParams]);
+  const initialProfile = contactProfiles.includes(query.profil as ContactProfile) ? query.profil as ContactProfile : "young";
   return (
     <main>
       <SiteHeader activePath="/contact" />
@@ -26,18 +23,19 @@ export default async function ContactPage() {
         <div>
           <SectionLabel>Contact · Nous rejoindre</SectionLabel>
           <h1>Une question, une envie, une rencontre à provoquer ? Parlons-en.</h1>
-          <p>Dis-nous simplement qui tu es et ce que tu aimerais faire avec VIE AVENIR. Nous reviendrons vers toi dès que possible.</p>
+          <p>Choisissez le parcours qui vous correspond et partagez simplement votre demande. VIE AVENIR vous indiquera la suite la plus adaptée.</p>
         </div>
         <strong aria-hidden="true">VA !</strong>
       </section>
 
-      <section className="audience-band">
+      <section className="audience-band" id="parcours">
         <div className="audience-grid">
-          {audiences.map(([title, text, tone]) => (
-            <article className={`audience-card tone-${tone}`} key={title}>
-              <h2>{title}</h2>
-              <p>{text}</p>
-            </article>
+          {contactProfiles.map((profile) => (
+            <Link className={`audience-card tone-${contactJourneys[profile].tone}`} href={`/contact?profil=${profile}#formulaire`} key={profile}>
+              <h2>{contactJourneys[profile].cardTitle}</h2>
+              <p>{contactJourneys[profile].description}</p>
+              <span>Choisir ce parcours →</span>
+            </Link>
           ))}
         </div>
       </section>
@@ -47,14 +45,14 @@ export default async function ContactPage() {
           <SectionLabel>Écrivez-nous</SectionLabel>
           <h2>Quelques mots suffisent pour commencer.</h2>
           <div className="contact-layout">
-            <ContactForm contactEmail={settings.public_email} />
+            <ContactForm initialProfile={initialProfile} />
             <aside className="contact-aside">
               <section className="next-steps">
                 <h3>Et après ?</h3>
                 <ol>
-                  <li><span>1</span>Nous lisons ton message</li>
+                  <li><span>1</span>Votre message est lu</li>
                   <li><span>2</span>Nous identifions la bonne suite</li>
-                  <li><span>3</span>Nous te recontactons</li>
+                  <li><span>3</span>Nous vous recontactons</li>
                 </ol>
               </section>
               <section className="contact-details">

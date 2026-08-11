@@ -4,8 +4,10 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { legalPageDefaults } from "@/data/legal-page-defaults";
 import { requireAdmin } from "@/lib/admin-auth";
 import type { AdminActionState } from "@/lib/admin-action-state";
+import type { LegalPageSlug } from "@/lib/cms-types";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -21,6 +23,7 @@ const loginSchema = z.object({
 
 const associationSchema = z.object({
   legal_name: z.string().trim().min(2, "Le nom de l’association est requis."),
+  association_status: z.string().trim().max(120),
   public_email: z.union([z.literal(""), z.email("Adresse e-mail invalide.")]),
   phone: z.string().trim().max(30),
   whatsapp: z.string().trim().max(30),
@@ -31,6 +34,34 @@ const associationSchema = z.object({
   instagram_url: optionalUrl,
   tiktok_url: optionalUrl,
   website_url: optionalUrl,
+});
+
+const programItemSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(2, "Chaque étape renseignée doit avoir un titre.")
+    .max(100, "Le titre d’une étape ne doit pas dépasser 100 caractères."),
+  description: z
+    .string()
+    .trim()
+    .max(300, "Le texte sous un titre ne doit pas dépasser 300 caractères."),
+});
+
+const legalSectionSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().trim().min(2, "Chaque section doit avoir un titre.").max(140),
+  body: z.string().trim().min(20, "Chaque section doit contenir au moins 20 caractères.").max(5000),
+  note: z.string().trim().max(2000),
+});
+
+const legalPageSchema = z.object({
+  eyebrow: z.string().trim().min(2, "Le libellé au-dessus du titre est requis.").max(100),
+  title: z.string().trim().min(4, "Le titre de la page est requis.").max(140),
+  description: z.string().trim().min(20, "Ajoutez une introduction d’au moins 20 caractères.").max(500),
+  summary_title: z.string().trim().max(140),
+  summary_items: z.array(z.string().trim().min(2).max(300)).max(4),
+  sections: z.array(legalSectionSchema).min(1),
 });
 
 const eventSchema = z
@@ -52,7 +83,7 @@ const eventSchema = z
     registration_deadline: z.string(),
     registration_status: z.enum(["coming_soon", "open", "full", "cancelled", "closed"]),
     publication_status: z.enum(["draft", "published", "archived"]),
-    program: z.string().max(2000),
+    program: z.array(programItemSchema).max(4),
   })
   .refine((value) => value.age_max >= value.age_min, {
     message: "L’âge maximum doit être supérieur ou égal à l’âge minimum.",
@@ -146,6 +177,7 @@ export async function saveAssociationSettings(
   const { error } = await supabase.from("association_settings").upsert({
     id: true,
     legal_name: values.legal_name,
+    association_status: emptyToNull(values.association_status),
     public_email: emptyToNull(values.public_email),
     phone: emptyToNull(values.phone),
     whatsapp: emptyToNull(values.whatsapp),
@@ -174,7 +206,12 @@ export async function saveEvent(
   formData: FormData,
 ): Promise<AdminActionState> {
   const admin = await requireAdmin();
-  const result = eventSchema.safeParse(Object.fromEntries(formData));
+  const raw = Object.fromEntries(formData);
+  const program = Array.from({ length: 4 }, (_, index) => ({
+    title: String(formData.get(`program_${index}_title`) ?? "").trim(),
+    description: String(formData.get(`program_${index}_description`) ?? "").trim(),
+  })).filter((item) => item.title || item.description);
+  const result = eventSchema.safeParse({ ...raw, program });
 
   if (!result.success) {
     return { status: "error", message: result.error.issues[0]?.message ?? "Formulaire invalide." };
@@ -237,10 +274,6 @@ export async function saveEvent(
     imageUrl = supabase.storage.from("event-images").getPublicUrl(path).data.publicUrl;
   }
 
-  const program = result.data.program
-    .split("\n")
-    .map((item) => item.trim())
-    .filter(Boolean);
   const slugBase = slugify(result.data.title) || "evenement";
   const slug = `${slugBase}-${startsAt.slice(0, 10)}`;
 
@@ -265,7 +298,7 @@ export async function saveEvent(
     registration_status: result.data.registration_status,
     publication_status: result.data.publication_status,
     image_url: imageUrl,
-    program,
+    program: result.data.program,
     updated_by: admin.id,
   });
 
@@ -311,4 +344,54 @@ export async function deleteEvent(
   revalidatePath("/admin");
   revalidatePath("/admin/evenements");
   redirect("/admin/evenements?supprime=1");
+}
+
+export async function saveLegalPage(
+  slug: LegalPageSlug,
+  _previousState: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  const admin = await requireAdmin();
+  const defaults = legalPageDefaults[slug];
+  const raw = Object.fromEntries(formData);
+  const sections = defaults.sections.map((section, index) => ({
+    id: section.id,
+    title: String(formData.get(`section_${index}_title`) ?? ""),
+    body: String(formData.get(`section_${index}_body`) ?? ""),
+    note: String(formData.get(`section_${index}_note`) ?? ""),
+  }));
+  const summaryItems = Array.from({ length: defaults.summary_items.length }, (_, index) =>
+    String(formData.get(`summary_item_${index}`) ?? "").trim(),
+  ).filter(Boolean);
+  const result = legalPageSchema.safeParse({
+    ...raw,
+    summary_items: summaryItems,
+    sections,
+  });
+
+  if (!result.success) {
+    return { status: "error", message: result.error.issues[0]?.message ?? "Formulaire invalide." };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return { status: "error", message: "Base de données indisponible." };
+
+  const { error } = await supabase.from("legal_pages").upsert({
+    slug,
+    eyebrow: result.data.eyebrow,
+    title: result.data.title,
+    description: result.data.description,
+    summary_title: emptyToNull(result.data.summary_title),
+    summary_items: result.data.summary_items,
+    sections: result.data.sections,
+    updated_by: admin.id,
+  });
+
+  if (error) return { status: "error", message: `Enregistrement impossible : ${error.message}` };
+
+  revalidatePath(`/${slug}`);
+  revalidatePath("/admin");
+  revalidatePath("/admin/pages-juridiques");
+  revalidatePath(`/admin/pages-juridiques/${slug}`);
+  return { status: "success", message: "La page juridique est enregistrée et publiée." };
 }
