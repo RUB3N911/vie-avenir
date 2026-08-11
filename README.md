@@ -11,6 +11,7 @@ Site vitrine de l’association martiniquaise **VIE AVENIR**, qui crée des renc
 - CSS responsive avec la charte graphique VIE AVENIR
 - GitHub pour versionner, relire et valider les évolutions
 - Vercel pour les aperçus automatiques et la mise en production
+- Supabase pour l’administration, les événements et leurs visuels
 
 ## Lancer le site
 
@@ -37,6 +38,7 @@ Cette commande contrôle les types, la qualité du code et la construction de la
 ```text
 src/
   app/                    Routes, métadonnées et styles globaux Next.js
+  app/admin/              Connexion et écrans de gestion privés
   components/             Composants interactifs et réutilisables
   data/                   Navigation et futures données éditoriales
   layouts/                En-tête, menu, pied de page et structures partagées
@@ -44,6 +46,7 @@ src/
 docs/                     Identité, plan de contenu et feuille de route
 public/images/            Visuels classés par usage (marque, accueil, mission)
 public/favicon.svg        Icône du site
+supabase/                 Schéma sécurisé et activation du compte administrateur
 .github/                  Contrôles automatiques et modèle de pull request
 ```
 
@@ -64,9 +67,10 @@ Le déploiement est confié à l’intégration Git native de Vercel. Aucun jeto
 | Variable | Rôle | Exemple |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Adresse publique du site, utile pour les futurs liens absolus et le référencement | `https://www.vie-avenir.fr` |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | Adresse officielle qui permet au formulaire d’ouvrir un e-mail prérempli | `contact@vie-avenir.fr` |
+| `NEXT_PUBLIC_SUPABASE_URL` | Adresse de la base et du service d’authentification | Fournie par Supabase |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clé publique utilisée avec les règles RLS | Fournie par Supabase |
 
-Tant que `NEXT_PUBLIC_CONTACT_EMAIL` est vide, le formulaire affiche un message transparent indiquant que l’envoi n’est pas encore activé.
+Tant que Supabase n’est pas raccordé, le site conserve l’événement initial et la page `/admin/connexion` indique clairement que l’activation est en attente. La procédure complète est décrite dans [`docs/admin-setup.md`](docs/admin-setup.md).
 
 Les secrets et les fichiers `.env.local` ne doivent jamais être ajoutés à Git.
 

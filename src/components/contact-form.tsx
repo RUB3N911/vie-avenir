@@ -3,14 +3,14 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 
-export function ContactForm() {
+export function ContactForm({ contactEmail }: { contactEmail?: string | null }) {
   const [notice, setNotice] = useState("");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+    const email = contactEmail;
 
     if (!email) {
       setNotice("L’envoi sera activé dès que l’adresse officielle de VIE AVENIR sera renseignée.");

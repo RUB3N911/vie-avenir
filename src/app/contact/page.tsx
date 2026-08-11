@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
+import { getAssociationSettings } from "@/lib/cms-data";
 
 export const metadata: Metadata = {
   title: "Nous rejoindre",
   description: "Contactez VIE AVENIR pour participer à un atelier, partager un métier ou construire un partenariat en Martinique.",
 };
+
+export const dynamic = "force-dynamic";
 
 const audiences = [
   ["Tu as 14—25 ans", "Participer, poser une question ou proposer une idée.", "pink"],
@@ -14,7 +17,8 @@ const audiences = [
   ["Vous représentez une structure", "Imaginer un partenariat ou accueillir une action.", "green"],
 ] as const;
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getAssociationSettings();
   return (
     <main>
       <SiteHeader activePath="/contact" />
@@ -43,7 +47,7 @@ export default function ContactPage() {
           <SectionLabel>Écrivez-nous</SectionLabel>
           <h2>Quelques mots suffisent pour commencer.</h2>
           <div className="contact-layout">
-            <ContactForm />
+            <ContactForm contactEmail={settings.public_email} />
             <aside className="contact-aside">
               <section className="next-steps">
                 <h3>Et après ?</h3>
@@ -55,8 +59,8 @@ export default function ContactPage() {
               </section>
               <section className="contact-details">
                 <h3>Contacter l’association</h3>
-                <strong>VIE AVENIR<br />Martinique</strong>
-                <p>Pour participer, proposer un métier ou construire un partenariat, utilisez le formulaire en ligne.</p>
+                <strong>{settings.legal_name}<br />{settings.city}</strong>
+                {settings.public_email ? <p><a href={`mailto:${settings.public_email}`}>{settings.public_email}</a>{settings.phone ? <><br /><a href={`tel:${settings.phone.replace(/\s/g, "")}`}>{settings.phone}</a></> : null}</p> : <p>Pour participer, proposer un métier ou construire un partenariat, utilisez le formulaire en ligne.</p>}
                 <Link href="/politique-confidentialite">Comment vos données sont protégées <span aria-hidden="true">→</span></Link>
               </section>
             </aside>
