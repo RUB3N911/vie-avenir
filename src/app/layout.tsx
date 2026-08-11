@@ -58,10 +58,6 @@ export const metadata: Metadata = {
     : {
         "codex-preview": "development",
       },
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
