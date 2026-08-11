@@ -82,10 +82,14 @@ export function SiteFooter() {
         <Link href="/evenements">Événements</Link>
         <Link href="/partenaires">Partenaires</Link>
         <Link href="/contact">Contact</Link>
-        <Link href="/mentions-legales">Mentions légales</Link>
-        <Link href="/politique-confidentialite">Confidentialité</Link>
       </nav>
-      <p className="copyright">© 2026 VIE AVENIR · Martinique</p>
+      <div className="footer-meta">
+        <p className="copyright">© 2026 VIE AVENIR · Martinique</p>
+        <nav className="footer-legal-links" aria-label="Informations légales">
+          <Link href="/mentions-legales">Mentions légales</Link>
+          <Link href="/politique-confidentialite">Confidentialité</Link>
+        </nav>
+      </div>
     </footer>
   );
 }

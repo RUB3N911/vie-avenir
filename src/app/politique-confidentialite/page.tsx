@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
+import { LegalPageShell, LegalSection } from "@/components/legal-page-shell";
 import { legalConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -8,62 +8,68 @@ export const metadata: Metadata = {
   description: "Comment VIE AVENIR utilise et protège les données personnelles transmises sur son site.",
 };
 
+const privacyNavigation = [
+  { id: "responsable", label: "Responsable" },
+  { id: "donnees", label: "Données concernées" },
+  { id: "finalites", label: "Finalités et base" },
+  { id: "conservation", label: "Conservation" },
+  { id: "hebergement", label: "Hébergement" },
+  { id: "droits", label: "Vos droits" },
+  { id: "cookies", label: "Cookies" },
+] as const;
+
 export default function PrivacyPage() {
   return (
-    <main>
-      <SiteHeader />
-      <header className="legal-hero legal-hero-privacy">
-        <div className="page-container">
-          <SectionLabel>Vos données · Vos droits</SectionLabel>
-          <h1>Politique de confidentialité</h1>
-          <p>Une information claire, y compris pour les jeunes, sur les données utilisées par VIE AVENIR.</p>
-        </div>
-      </header>
-
-      <article className="legal-content page-container">
-        <p className="legal-updated">Dernière mise à jour : {legalConfig.updatedAt}</p>
-
+    <LegalPageShell
+      description="Une information claire et compréhensible, y compris pour les jeunes, sur les données utilisées par VIE AVENIR."
+      eyebrow="Vos données · Vos droits"
+      navigation={privacyNavigation}
+      relatedHref="/mentions-legales"
+      relatedLabel="Les mentions légales du site"
+      title="Politique de confidentialité"
+      updatedAt={legalConfig.updatedAt}
+      variant="privacy"
+    >
         <section className="privacy-summary" aria-labelledby="privacy-summary-title">
-          <h2 id="privacy-summary-title">L’essentiel, en mots simples</h2>
+          <div>
+            <p>À retenir</p>
+            <h2 id="privacy-summary-title">L’essentiel, en mots simples</h2>
+          </div>
           <ul>
-            <li>Nous utilisons tes informations uniquement pour répondre à ton message et organiser la suite demandée.</li>
-            <li>Nous ne vendons jamais tes données et ne les utilisons pas pour de la publicité.</li>
-            <li>Tu peux demander à voir, corriger ou supprimer tes informations.</li>
-            <li>Si tu as moins de 15 ans, demande à un parent ou responsable légal de t’aider à nous écrire.</li>
+            <li><span aria-hidden="true">✓</span> Tes informations servent uniquement à répondre à ta demande.</li>
+            <li><span aria-hidden="true">✓</span> Nous ne vendons jamais tes données et ne faisons pas de publicité.</li>
+            <li><span aria-hidden="true">✓</span> Tu peux demander à les voir, les corriger ou les supprimer.</li>
+            <li><span aria-hidden="true">✓</span> Si tu as moins de 15 ans, demande l’aide d’un responsable légal.</li>
           </ul>
         </section>
 
-        <section>
-          <h2>1. Responsable du traitement</h2>
+        <LegalSection id="responsable" number="01" title="Responsable du traitement">
           <p>
             Le responsable du traitement est <strong>VIE AVENIR</strong>, projet associatif établi en {legalConfig.location}.
             Toute demande relative à vos données peut être envoyée depuis la <Link href="/contact">page de contact</Link>
             en indiquant « Exercice de mes droits » dans l’objet.
           </p>
-        </section>
+        </LegalSection>
 
-        <section>
-          <h2>2. Données concernées</h2>
+        <LegalSection id="donnees" number="02" title="Données concernées">
           <p>
             Le formulaire peut recueillir vos prénom et nom, adresse e-mail, profil, objet et message. Ne transmettez
             aucune donnée sensible ou information qui n’est pas nécessaire à votre demande. Des données techniques
             minimales, comme l’adresse IP et les journaux de sécurité, peuvent être traitées par l’hébergeur pour assurer
             le fonctionnement et la protection du site.
           </p>
-        </section>
+        </LegalSection>
 
-        <section>
-          <h2>3. Pourquoi et sur quelle base ?</h2>
+        <LegalSection id="finalites" number="03" title="Pourquoi et sur quelle base ?">
           <p>
             Les informations servent à répondre aux demandes, préparer une participation, mettre en relation un
             professionnel ou étudier un partenariat. Le traitement repose sur l’intérêt légitime de VIE AVENIR à répondre
             aux sollicitations reçues et, lorsque la demande prépare une inscription ou une collaboration, sur les mesures
             prises à votre demande avant cette démarche.
           </p>
-        </section>
+        </LegalSection>
 
-        <section>
-          <h2>4. Destinataires et conservation</h2>
+        <LegalSection id="conservation" number="04" title="Destinataires et conservation">
           <p>
             Les informations sont accessibles uniquement aux membres autorisés de VIE AVENIR et, si nécessaire, aux
             prestataires techniques indispensables au fonctionnement du site. Elles ne sont ni vendues ni transmises à
@@ -74,10 +80,9 @@ export default function PrivacyPage() {
             Tant que l’envoi du formulaire n’est pas activé, les informations saisies restent dans votre navigateur et ne
             sont pas transmises à VIE AVENIR.
           </p>
-        </section>
+        </LegalSection>
 
-        <section>
-          <h2>5. Hébergement et transferts</h2>
+        <LegalSection id="hebergement" number="05" title="Hébergement et transferts">
           <p>
             Le site est hébergé par Vercel Inc., société établie aux États-Unis. Vercel peut traiter des données techniques
             de connexion dans le cadre de l’hébergement et de la sécurité du service, selon ses engagements contractuels
@@ -86,28 +91,24 @@ export default function PrivacyPage() {
               politique de confidentialité de Vercel
             </a>.
           </p>
-        </section>
+        </LegalSection>
 
-        <section>
-          <h2>6. Vos droits</h2>
+        <LegalSection id="droits" number="06" title="Vos droits">
           <p>
             Selon votre situation, vous pouvez demander l’accès, la rectification, l’effacement ou la limitation de vos
             données, vous opposer à leur traitement et demander leur portabilité. Vous pouvez aussi saisir la CNIL si vous
             estimez que vos droits ne sont pas respectés. Pour exercer un droit, utilisez la{" "}
             <Link href="/contact">page de contact</Link>. Une preuve d’identité ne sera demandée qu’en cas de doute raisonnable.
           </p>
-        </section>
+        </LegalSection>
 
-        <section>
-          <h2>7. Cookies et mesure d’audience</h2>
+        <LegalSection id="cookies" number="07" title="Cookies et mesure d’audience">
           <p>
             Le site n’utilise actuellement aucun cookie publicitaire ni outil de mesure d’audience nécessitant votre
             consentement. Si un tel outil est ajouté, cette page sera mise à jour et un dispositif de choix sera affiché
             avant tout dépôt non essentiel.
           </p>
-        </section>
-      </article>
-      <SiteFooter />
-    </main>
+        </LegalSection>
+    </LegalPageShell>
   );
 }
