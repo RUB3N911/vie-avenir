@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Arrow, SiteFooter, SiteHeader } from "@/layouts/site-shell";
+import { formatEventDate, getNextPublishedEvent } from "@/lib/cms-data";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const nextEvent = await getNextPublishedEvent();
+  const eventDate = nextEvent ? formatEventDate(nextEvent.starts_at) : null;
   return (
     <main>
       <SiteHeader />
@@ -124,24 +129,26 @@ export default function Home() {
         </ol>
       </section>
 
-      <section className="event-section" id="evenement">
-        <div className="event-date" aria-label="3 octobre 2026">
-          <span>03</span>
-          <p>OCT<br />2026</p>
-        </div>
-        <div className="event-content">
-          <p className="event-label">Prochain rendez-vous · Martinique</p>
-          <h2>L’aventure commence maintenant.</h2>
-          <p>Un premier atelier vivant pour rencontrer, questionner, essayer et voir son avenir autrement.</p>
-          <div className="event-tags" aria-label="Programme">
-            <span>Rencontres métiers</span><span>Défis</span><span>Échanges sans tabou</span>
+      {nextEvent && eventDate ? (
+        <section className="event-section" id="evenement">
+          <div className="event-date" aria-label={eventDate.long}>
+            <span>{eventDate.day}</span>
+            <p>{eventDate.month}<br />{eventDate.year}</p>
           </div>
-        </div>
-        <Link className="event-cta" href="/contact">
-          <span>Être informé·e</span>
-          <strong>↗</strong>
-        </Link>
-      </section>
+          <div className="event-content">
+            <p className="event-label">Prochain rendez-vous · {nextEvent.city}</p>
+            <h2>{nextEvent.title}</h2>
+            <p>{nextEvent.summary}</p>
+            <div className="event-tags" aria-label="Programme">
+              {nextEvent.program.slice(0, 3).map((item) => <span key={item}>{item}</span>)}
+            </div>
+          </div>
+          <Link className="event-cta" href={`/evenements#${nextEvent.slug}`}>
+            <span>Voir les informations</span>
+            <strong>↗</strong>
+          </Link>
+        </section>
+      ) : null}
 
       <section className="partner-section" id="partenaires">
         <div className="partner-copy">

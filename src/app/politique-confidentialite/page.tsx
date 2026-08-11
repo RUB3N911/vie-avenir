@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPageShell, LegalSection } from "@/components/legal-page-shell";
+import { getAssociationSettings } from "@/lib/cms-data";
 import { legalConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
   description: "Comment VIE AVENIR utilise et protège les données personnelles transmises sur son site.",
 };
+
+export const dynamic = "force-dynamic";
 
 const privacyNavigation = [
   { id: "responsable", label: "Responsable" },
@@ -18,7 +21,8 @@ const privacyNavigation = [
   { id: "cookies", label: "Cookies" },
 ] as const;
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const settings = await getAssociationSettings();
   return (
     <LegalPageShell
       description="Une information claire et compréhensible, y compris pour les jeunes, sur les données utilisées par VIE AVENIR."
@@ -45,8 +49,8 @@ export default function PrivacyPage() {
 
         <LegalSection id="responsable" number="01" title="Responsable du traitement">
           <p>
-            Le responsable du traitement est <strong>VIE AVENIR</strong>, projet associatif établi en {legalConfig.location}.
-            Toute demande relative à vos données peut être envoyée depuis la <Link href="/contact">page de contact</Link>
+            Le responsable du traitement est <strong>{settings.legal_name}</strong>, association établie à {settings.city || legalConfig.location}.
+            Toute demande relative à vos données peut être envoyée {settings.public_email ? <>à <a href={`mailto:${settings.public_email}`}>{settings.public_email}</a></> : <>depuis la <Link href="/contact">page de contact</Link></>}
             en indiquant « Exercice de mes droits » dans l’objet.
           </p>
         </LegalSection>

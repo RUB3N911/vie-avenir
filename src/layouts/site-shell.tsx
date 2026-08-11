@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { navigation, type NavigationPath } from "@/data/navigation";
+import { getAssociationSettings } from "@/lib/cms-data";
 
 type SiteHeaderProps = {
   activePath?: NavigationPath | "/contact";
@@ -63,7 +64,15 @@ export function SiteHeader({ activePath }: SiteHeaderProps) {
   );
 }
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const settings = await getAssociationSettings();
+  const publicContacts = [
+    settings.public_email ? { href: `mailto:${settings.public_email}`, label: settings.public_email } : null,
+    settings.phone ? { href: `tel:${settings.phone.replace(/\s/g, "")}`, label: settings.phone } : null,
+    settings.instagram_url ? { href: settings.instagram_url, label: "Instagram" } : null,
+    settings.tiktok_url ? { href: settings.tiktok_url, label: "TikTok" } : null,
+  ].filter((item): item is { href: string; label: string } => Boolean(item));
+
   return (
     <footer>
       <Link className="footer-brand" href="/" aria-label="VIE AVENIR — accueil">
@@ -75,7 +84,14 @@ export function SiteFooter() {
           sizes="300px"
         />
       </Link>
-      <p>Des rencontres qui changent des trajectoires.</p>
+      <div className="footer-intro">
+        <p>Des rencontres qui changent des trajectoires.</p>
+        {publicContacts.length ? (
+          <div className="footer-contact-links">
+            {publicContacts.map((item) => <a href={item.href} key={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel={item.href.startsWith("http") ? "noreferrer" : undefined}>{item.label}</a>)}
+          </div>
+        ) : null}
+      </div>
       <nav className="footer-links" aria-label="Navigation de pied de page">
         <Link href="/notre-mission">Mission</Link>
         <Link href="/nos-actions">Actions</Link>

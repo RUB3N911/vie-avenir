@@ -14,6 +14,7 @@ const PAGE_TRANSITION_MS = 500;
 
 export function SiteTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const transitionsEnabled = !pathname.startsWith("/admin");
   const router = useRouter();
   const [loaderPhase, setLoaderPhase] = useState<LoaderPhase>("visible");
   const [pagePhase, setPagePhase] = useState<PagePhase>("entered");
@@ -60,7 +61,8 @@ export function SiteTransition({ children }: { children: ReactNode }) {
   useEffect(() => {
     const pendingTimers = timers.current;
     const pendingFrames = animationFrames.current;
-    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    reducedMotion.current =
+      !transitionsEnabled || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reducedMotion.current) {
       changeLoaderPhase("hidden");
@@ -78,15 +80,16 @@ export function SiteTransition({ children }: { children: ReactNode }) {
       pendingFrames.forEach((frame) => window.cancelAnimationFrame(frame));
       pendingFrames.clear();
     };
-  }, [changeLoaderPhase, schedule]);
+  }, [changeLoaderPhase, schedule, transitionsEnabled]);
 
   useEffect(() => {
-    const isBusy = loaderPhase !== "hidden" || pagePhase !== "entered";
+    const isBusy = transitionsEnabled && (loaderPhase !== "hidden" || pagePhase !== "entered");
     document.body.classList.toggle("is-transitioning", isBusy);
     return () => document.body.classList.remove("is-transitioning");
-  }, [loaderPhase, pagePhase]);
+  }, [loaderPhase, pagePhase, transitionsEnabled]);
 
   useEffect(() => {
+    if (!transitionsEnabled) return;
     if (previousPathname.current === pathname) return;
 
     const cameFromHistory = pendingNavigation.current === "history";
@@ -99,9 +102,10 @@ export function SiteTransition({ children }: { children: ReactNode }) {
     }
 
     schedule(enterPage, cameFromHistory ? PAGE_TRANSITION_MS : 0);
-  }, [changePagePhase, enterPage, pathname, schedule]);
+  }, [changePagePhase, enterPage, pathname, schedule, transitionsEnabled]);
 
   useEffect(() => {
+    if (!transitionsEnabled) return;
     const handleInternalLink = (event: MouseEvent) => {
       if (
         event.defaultPrevented ||
@@ -161,7 +165,9 @@ export function SiteTransition({ children }: { children: ReactNode }) {
       document.removeEventListener("click", handleInternalLink, true);
       window.removeEventListener("popstate", handleHistoryNavigation);
     };
-  }, [changePagePhase, router, schedule]);
+  }, [changePagePhase, router, schedule, transitionsEnabled]);
+
+  if (!transitionsEnabled) return <>{children}</>;
 
   return (
     <>

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPageShell, LegalSection } from "@/components/legal-page-shell";
+import { getAssociationSettings } from "@/lib/cms-data";
 import { legalConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
   description: "Informations légales relatives au site de l’association VIE AVENIR.",
 };
+
+export const dynamic = "force-dynamic";
 
 const legalNavigation = [
   { id: "editeur", label: "Éditeur du site" },
@@ -16,7 +19,9 @@ const legalNavigation = [
   { id: "donnees", label: "Données personnelles" },
 ] as const;
 
-export default function LegalNoticePage() {
+export default async function LegalNoticePage() {
+  const settings = await getAssociationSettings();
+  const address = [settings.address, settings.postal_code, settings.city].filter(Boolean).join(", ");
   return (
     <LegalPageShell
       description="Retrouvez les informations essentielles sur l’éditeur, l’hébergement et les règles d’utilisation du site VIE AVENIR."
@@ -29,13 +34,13 @@ export default function LegalNoticePage() {
     >
         <LegalSection id="editeur" number="01" title="Éditeur du site">
           <p>
-            Le site <strong>VIE AVENIR</strong> est édité par le projet associatif VIE AVENIR,
-            établi en {legalConfig.location}.
+            Le site <strong>VIE AVENIR</strong> est édité par l’association {settings.legal_name},
+            établie {address ? `à l’adresse suivante : ${address}` : `en ${legalConfig.location}`}.
           </p>
           <p>Direction de la publication : {legalConfig.publicationDirector}.</p>
-          <p className="legal-note">{legalConfig.registrationNotice}</p>
+          {settings.rna_number ? <p>Numéro RNA : <strong>{settings.rna_number}</strong>.</p> : <p className="legal-note">{legalConfig.registrationNotice}</p>}
           <p>
-            Pour contacter l’association, utilisez la <Link href="/contact">page Nous rejoindre</Link>.
+            Pour contacter l’association, {settings.public_email ? <a href={`mailto:${settings.public_email}`}>{settings.public_email}</a> : <>utilisez la <Link href="/contact">page Nous rejoindre</Link></>}.
           </p>
         </LegalSection>
 
