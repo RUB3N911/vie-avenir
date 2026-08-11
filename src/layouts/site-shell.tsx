@@ -79,8 +79,11 @@ export function SiteFooter() {
       <nav className="footer-links" aria-label="Navigation de pied de page">
         <Link href="/notre-mission">Mission</Link>
         <Link href="/nos-actions">Actions</Link>
+        <Link href="/evenements">Événements</Link>
         <Link href="/partenaires">Partenaires</Link>
         <Link href="/contact">Contact</Link>
+        <Link href="/mentions-legales">Mentions légales</Link>
+        <Link href="/politique-confidentialite">Confidentialité</Link>
       </nav>
       <p className="copyright">© 2026 VIE AVENIR · Martinique</p>
     </footer>

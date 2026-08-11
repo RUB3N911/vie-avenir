@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
@@ -53,10 +54,10 @@ export default function ContactPage() {
                 </ol>
               </section>
               <section className="contact-details">
-                <h3>Coordonnées</h3>
-                <strong>Les coordonnées officielles seront ajoutées avant l’ouverture des inscriptions.</strong>
-                <p>En attendant, le formulaire constitue le point de contact principal du site.</p>
-                <span>Instagram · TikTok · à renseigner</span>
+                <h3>Contacter l’association</h3>
+                <strong>VIE AVENIR<br />Martinique</strong>
+                <p>Pour participer, proposer un métier ou construire un partenariat, utilisez le formulaire en ligne.</p>
+                <Link href="/politique-confidentialite">Comment vos données sont protégées <span aria-hidden="true">→</span></Link>
               </section>
             </aside>
           </div>

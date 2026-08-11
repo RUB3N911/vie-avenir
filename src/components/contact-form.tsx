@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 
 export function ContactForm() {
   const [notice, setNotice] = useState("");
@@ -25,7 +26,12 @@ export function ContactForm() {
   }
 
   return (
-    <form className="contact-form" id="formulaire" onSubmit={handleSubmit}>
+    <form
+      className="contact-form"
+      id="formulaire"
+      aria-describedby="form-privacy"
+      onSubmit={handleSubmit}
+    >
       <div className="form-grid">
         <label>
           Prénom et nom
@@ -62,6 +68,11 @@ export function ContactForm() {
         />
       </label>
       <button className="button button-pink" type="submit">Envoyer ma demande <span aria-hidden="true">↗</span></button>
+      <p className="form-privacy" id="form-privacy">
+        Les informations servent uniquement à répondre à votre demande. Si tu as moins de 15 ans,
+        utilise ce formulaire avec l’aide d’un parent ou responsable légal. En savoir plus dans notre{" "}
+        <Link href="/politique-confidentialite">politique de confidentialité</Link>.
+      </p>
       {notice && <p className="form-notice" role="status">{notice}</p>}
     </form>
   );

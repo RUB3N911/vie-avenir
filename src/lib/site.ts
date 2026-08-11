@@ -13,7 +13,24 @@ export const siteConfig = {
     "/evenements",
     "/partenaires",
     "/contact",
+    "/mentions-legales",
+    "/politique-confidentialite",
   ],
+} as const;
+
+export const legalConfig = {
+  publisher: "VIE AVENIR",
+  location: "Martinique, France",
+  publicationDirector: "La présidence de l’association VIE AVENIR",
+  registrationNotice:
+    "L’adresse complète du siège social et le numéro RNA seront publiés dès leur validation officielle.",
+  host: {
+    name: "Vercel Inc.",
+    address: "440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis",
+    website: "https://vercel.com",
+  },
+  privacyRetention: "12 mois après le dernier échange",
+  updatedAt: "11 août 2026",
 } as const;
 
 export function getSiteUrl() {
