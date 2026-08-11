@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveEvent } from "@/app/admin/actions";
 import { ActionMessage } from "@/components/admin/action-message";
 import { SubmitButton } from "@/components/admin/submit-button";
+import { defaultProgram } from "@/data/cms-defaults";
 import type { EventRecord } from "@/lib/cms-types";
 import { initialAdminActionState } from "@/lib/admin-action-state";
 
@@ -25,6 +26,10 @@ function inputDateTime(value: string | null) {
 export function EventForm({ event }: { event?: EventRecord | null }) {
   const actionWithId = saveEvent.bind(null, event?.id ?? null);
   const [state, action] = useActionState(actionWithId, initialAdminActionState);
+  const savedProgram = event?.program.length ? event.program : defaultProgram;
+  const program = Array.from({ length: 4 }, (_, index) =>
+    savedProgram[index] ?? { title: "", description: "" },
+  );
 
   return (
     <form className="admin-form" action={action} encType="multipart/form-data">
@@ -56,7 +61,36 @@ export function EventForm({ event }: { event?: EventRecord | null }) {
           <label className="admin-field"><span>Âge maximum</span><input name="age_max" type="number" min="0" max="99" defaultValue={event?.age_max ?? 25} required /></label>
           <label className="admin-field"><span>Nombre de places</span><input name="capacity" type="number" min="1" defaultValue={event?.capacity ?? ""} placeholder="Illimité / à confirmer" /></label>
           <label className="admin-field"><span>Tarif</span><input name="price_label" defaultValue={event?.price_label ?? "Gratuit"} required /></label>
-          <label className="admin-field admin-field-full"><span>Programme <small>— une ligne par étape</small></span><textarea name="program" rows={5} defaultValue={event?.program.join("\n") ?? "Rencontrer\nQuestionner\nEssayer\nRepartir avec une prochaine étape"} /></label>
+          <fieldset className="admin-program-editor admin-field-full">
+            <legend>Programme</legend>
+            <p>Renseignez le gros titre et le texte affiché juste en dessous. Une étape entièrement vide ne sera pas affichée.</p>
+            <div className="admin-program-list">
+              {program.map((item, index) => (
+                <div className="admin-program-item" key={index}>
+                  <span aria-hidden="true">{index + 1}</span>
+                  <label className="admin-field">
+                    <span>Gros titre</span>
+                    <input
+                      name={`program_${index}_title`}
+                      defaultValue={item.title}
+                      maxLength={100}
+                      placeholder={index === 0 ? "Ex. Rencontres métiers" : "Titre de l’étape"}
+                    />
+                  </label>
+                  <label className="admin-field">
+                    <span>Texte sous le titre</span>
+                    <textarea
+                      name={`program_${index}_description`}
+                      rows={2}
+                      defaultValue={item.description}
+                      maxLength={300}
+                      placeholder="Décrivez cette étape en une phrase courte."
+                    />
+                  </label>
+                </div>
+              ))}
+            </div>
+          </fieldset>
           <label className="admin-field admin-field-full"><span>Informations pratiques</span><textarea name="access_details" rows={4} defaultValue={event?.access_details ?? ""} /></label>
         </div>
       </section>

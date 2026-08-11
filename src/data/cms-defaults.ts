@@ -1,7 +1,23 @@
-import type { AssociationSettings, EventRecord } from "@/lib/cms-types";
+import type { AssociationSettings, EventRecord, ProgramItem } from "@/lib/cms-types";
+
+export const defaultProgram: ProgramItem[] = [
+  {
+    title: "Rencontres métiers",
+    description: "Des parcours vrais et des rencontres accessibles.",
+  },
+  {
+    title: "Défis",
+    description: "Sans filtre et sans mauvaise question.",
+  },
+  {
+    title: "Échanges sans tabou",
+    description: "Des activités et des mises en situation concrètes.",
+  },
+];
 
 export const defaultAssociationSettings: AssociationSettings = {
   legal_name: "VIE AVENIR",
+  association_status: null,
   public_email: null,
   phone: null,
   whatsapp: null,
@@ -37,7 +53,7 @@ export const defaultEvent: EventRecord = {
   registration_status: "coming_soon",
   publication_status: "published",
   image_url: null,
-  program: ["Rencontres métiers", "Défis", "Échanges sans tabou"],
+  program: defaultProgram,
   created_at: "2026-08-11T00:00:00.000Z",
   updated_at: "2026-08-11T00:00:00.000Z",
 };
