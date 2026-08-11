@@ -1,15 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const navigation = [
-  { href: "/notre-mission", label: "Notre mission" },
-  { href: "/nos-actions", label: "Nos actions" },
-  { href: "/evenements", label: "Événements" },
-  { href: "/partenaires", label: "Partenaires" },
-] as const;
+import { navigation, type NavigationPath } from "@/data/navigation";
 
 type SiteHeaderProps = {
-  activePath?: (typeof navigation)[number]["href"] | "/contact";
+  activePath?: NavigationPath | "/contact";
 };
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
@@ -19,7 +13,7 @@ export function SiteHeader({ activePath }: SiteHeaderProps) {
     <header className="site-header">
       <Link className="brand" href="/" aria-label="VIE AVENIR — accueil">
         <Image
-          src="/logo-vie-avenir.webp"
+          src="/images/brand/logo-vie-avenir.webp"
           alt="VIE AVENIR — Va et deviens !"
           width={300}
           height={200}
@@ -74,7 +68,7 @@ export function SiteFooter() {
     <footer>
       <Link className="footer-brand" href="/" aria-label="VIE AVENIR — accueil">
         <Image
-          src="/logo-vie-avenir.webp"
+          src="/images/brand/logo-vie-avenir.webp"
           alt="VIE AVENIR"
           width={300}
           height={200}
@@ -85,7 +79,6 @@ export function SiteFooter() {
       <nav className="footer-links" aria-label="Navigation de pied de page">
         <Link href="/notre-mission">Mission</Link>
         <Link href="/nos-actions">Actions</Link>
-        <Link href="/evenements">Événements</Link>
         <Link href="/partenaires">Partenaires</Link>
         <Link href="/contact">Contact</Link>
       </nav>
@@ -101,16 +94,18 @@ export function SectionLabel({ children }: { children: React.ReactNode }) {
 type CalloutProps = {
   eyebrow: string;
   title: string;
+  description?: string;
   buttonLabel: string;
   href: string;
 };
 
-export function Callout({ eyebrow, title, buttonLabel, href }: CalloutProps) {
+export function Callout({ eyebrow, title, description, buttonLabel, href }: CalloutProps) {
   return (
     <section className="page-callout">
       <div>
         <p>{eyebrow}</p>
         <h2>{title}</h2>
+        {description ? <span>{description}</span> : null}
       </div>
       <Link className="button button-pink" href={href}>{buttonLabel} <Arrow /></Link>
     </section>

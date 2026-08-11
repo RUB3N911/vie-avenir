@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
 export const metadata: Metadata = {
   title: "Événements",

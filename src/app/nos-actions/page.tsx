@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
 export const metadata: Metadata = {
   title: "Nos actions",
@@ -53,7 +53,7 @@ export default function ActionsPage() {
         </div>
         <div className="page-photo page-photo-right">
           <Image
-            src="/hero-vie-avenir.webp"
+            src="/images/hero/hero-vie-avenir.webp"
             alt="Atelier VIE AVENIR avec des jeunes et un professionnel"
             fill
             priority
