@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
 export const metadata: Metadata = {
   title: "Notre mission",
@@ -26,15 +26,15 @@ export default function MissionPage() {
       <SiteHeader activePath="/notre-mission" />
 
       <section className="page-hero page-hero-mission">
-        <div className="page-photo page-photo-left">
+        <div className="mission-hero-visual">
           <Image
-            src="/hero-vie-avenir.webp"
-            alt="Des jeunes Martiniquais échangent autour d’un projet"
-            fill
+            src="/images/mission/mission-hero-card.webp"
+            alt="Quatre jeunes Martiniquais échangent autour d’un projet"
+            width={530}
+            height={572}
             priority
-            sizes="(max-width: 800px) 100vw, 48vw"
+            sizes="(max-width: 760px) calc(100vw - 36px), 530px"
           />
-          <p className="photo-caption"><strong>Martinique · 14—25 ans</strong><span>Des rencontres qui ouvrent des possibles.</span></p>
         </div>
         <div className="page-hero-copy">
           <SectionLabel>Qui sommes-nous ?</SectionLabel>
@@ -47,7 +47,7 @@ export default function MissionPage() {
         </div>
       </section>
 
-      <section className="page-section page-section-tinted">
+      <section className="page-section page-section-tinted mission-reasons">
         <div className="page-container">
           <SectionLabel>Pourquoi VIE AVENIR ?</SectionLabel>
           <h2>Parce qu’un déclic peut changer une trajectoire.</h2>
@@ -62,7 +62,7 @@ export default function MissionPage() {
         </div>
       </section>
 
-      <section className="page-section">
+      <section className="page-section mission-principles">
         <div className="page-container">
           <SectionLabel>Notre façon d’agir</SectionLabel>
           <h2>Proche. Concret. Collectif.</h2>
@@ -82,6 +82,7 @@ export default function MissionPage() {
       <Callout
         eyebrow="L’histoire ne fait que commencer"
         title="Et si vous en faisiez partie ?"
+        description="Jeune, professionnel, entreprise ou collectivité : il y a une place pour vous."
         buttonLabel="Nous rejoindre"
         href="/contact"
       />

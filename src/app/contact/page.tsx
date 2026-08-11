@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
-import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
 export const metadata: Metadata = {
   title: "Nous rejoindre",

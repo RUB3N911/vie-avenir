@@ -35,19 +35,19 @@ Cette commande contrôle les types, la qualité du code et la construction de la
 ## Organisation
 
 ```text
-app/
-  layout.tsx              Métadonnées et structure générale
-  page.tsx                Page d’accueil
-  notre-mission/          Présentation de l’association
-  nos-actions/            Détail des trois formats d’action
-  evenements/             Prochain rendez-vous et formats à venir
-  partenaires/            Propositions de partenariat
-  contact/                Formulaire et informations pratiques
-  globals.css             Identité visuelle et responsive
-components/               En-tête, menu, pied de page et formulaire partagés
-public/            Logo, favicon et images publiques
-.github/           Contrôles automatiques et modèle de pull request
+src/
+  app/                    Routes, métadonnées et styles globaux Next.js
+  components/             Composants interactifs et réutilisables
+  data/                   Navigation et futures données éditoriales
+  layouts/                En-tête, menu, pied de page et structures partagées
+  lib/                    Configuration du site et fonctions techniques
+docs/                     Identité, plan de contenu et feuille de route
+public/images/            Visuels classés par usage (marque, accueil, mission)
+public/favicon.svg        Icône du site
+.github/                  Contrôles automatiques et modèle de pull request
 ```
+
+Cette organisation reprend la logique des projets `lescolibris226-site` et `secret-diles`, tout en conservant les conventions de routage propres à Next.js.
 
 ## Flux GitHub → Vercel
 

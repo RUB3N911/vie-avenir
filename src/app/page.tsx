@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Arrow, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { Arrow, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
 export default function Home() {
   return (
@@ -31,7 +31,7 @@ export default function Home() {
 
         <div className="hero-visual" aria-label="Des jeunes échangent avec une professionnelle">
           <Image
-            src="/hero-vie-avenir.webp"
+            src="/images/hero/hero-vie-avenir.webp"
             alt="Jeunes Martiniquais en échange avec une professionnelle"
             width="1672"
             height="941"
@@ -163,7 +163,7 @@ export default function Home() {
 
       <section className="contact-section" id="contact">
         <Image
-          src="/logo-vie-avenir.webp"
+          src="/images/brand/logo-vie-avenir.webp"
           alt=""
           aria-hidden="true"
           width="380"

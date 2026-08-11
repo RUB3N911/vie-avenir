@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 
 export const metadata: Metadata = {
   title: "Partenaires",
@@ -37,7 +37,7 @@ export default function PartnersPage() {
         </div>
         <div className="page-photo page-photo-right">
           <Image
-            src="/hero-vie-avenir.webp"
+            src="/images/hero/hero-vie-avenir.webp"
             alt="Un professionnel accompagne des jeunes lors d’un atelier"
             fill
             priority
