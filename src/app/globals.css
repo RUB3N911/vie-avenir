@@ -280,7 +280,7 @@ h1 em {
 .partner-choices p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.65; }
 .partner-choices strong { color: var(--pink); font-size: 21px; }
 
-.contact-section { position: relative; display: flex; flex-direction: column; align-items: center; min-height: 630px; padding: 110px 32px 92px; overflow: hidden; background: var(--navy); color: #fff; text-align: center; }
+.contact-section { position: relative; display: flex; flex-direction: column; align-items: center; min-height: 630px; padding: 110px 32px 92px; overflow: clip; contain: paint; background: var(--navy); color: #fff; text-align: center; }
 .contact-section::before, .contact-section::after { content: ""; position: absolute; border-radius: 50%; filter: blur(2px); }
 .contact-section::before { width: 470px; height: 470px; left: -270px; top: 20px; background: radial-gradient(circle at center, rgba(230,0,126,.32), transparent 68%); }
 .contact-section::after { width: 500px; height: 500px; right: -260px; bottom: -170px; background: radial-gradient(circle at center, rgba(76,175,80,.3), transparent 68%); }
@@ -336,6 +336,7 @@ footer > p { margin: 0; color: var(--ink-soft); font-size: 11px; }
   .hero-actions { align-items: flex-start; flex-direction: column; gap: 20px; }
   .hero-signature { margin-top: 34px; }
   .hero-visual, .hero-visual > img { min-height: 470px; height: 470px; }
+  .hero-visual::after { right: 0; }
   .badge-top { left: -6px; width: 118px; min-height: 118px; padding: 18px; }
   .badge-top strong { font-size: 22px; }
   .badge-bottom { right: -5px; bottom: 20px; }
@@ -356,6 +357,7 @@ footer > p { margin: 0; color: var(--ink-soft); font-size: 11px; }
   .partner-copy h2 { font-size: 43px; }
   .partner-choices article { grid-template-columns: 32px 1fr 24px; gap: 10px; }
   .contact-section { min-height: 650px; padding: 100px 18px 80px; }
+  .contact-section > img { display: none; }
   .contact-actions { flex-direction: column; width: min(100%, 300px); }
   footer { grid-template-columns: 1fr; gap: 18px; width: min(100% - 36px, 1340px); padding: 28px 0; }
   .footer-links { justify-content: flex-start; }
