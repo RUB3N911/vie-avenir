@@ -184,7 +184,7 @@ export default async function Home() {
           <Link className="button button-light" href="/contact?profil=young#formulaire">Je suis un jeune <Arrow /></Link>
           <Link className="button button-outline" href="/contact?profil=professional#formulaire">Je veux contribuer <Arrow /></Link>
         </div>
-        <p className="coming-soon">Inscriptions et contact bientôt disponibles</p>
+        <p className="coming-soon">Demandes et partenariats via notre formulaire de contact</p>
       </section>
 
       <SiteFooter />
