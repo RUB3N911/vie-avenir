@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "@fontsource/montserrat/600.css";
 import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/800.css";
@@ -64,7 +65,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><SiteTransition>{children}</SiteTransition></body>
+      <body>
+        <Suspense fallback={<div className="site-page-transition">{children}</div>}>
+          <SiteTransition>{children}</SiteTransition>
+        </Suspense>
+      </body>
     </html>
   );
 }

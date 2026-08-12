@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type LoaderPhase = "visible" | "revealing" | "hidden";
 type PagePhase = "entered" | "exiting" | "entering";
@@ -14,6 +14,8 @@ const PAGE_TRANSITION_MS = 500;
 
 export function SiteTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const routeKey = `${pathname}?${searchParams.toString()}`;
   const transitionsEnabled = !pathname.startsWith("/admin");
   const router = useRouter();
   const [loaderPhase, setLoaderPhase] = useState<LoaderPhase>("visible");
@@ -21,7 +23,7 @@ export function SiteTransition({ children }: { children: ReactNode }) {
   const loaderPhaseRef = useRef<LoaderPhase>("visible");
   const pagePhaseRef = useRef<PagePhase>("entered");
   const pendingNavigation = useRef<string | null>(null);
-  const previousPathname = useRef(pathname);
+  const previousRouteKey = useRef(routeKey);
   const reducedMotion = useRef(false);
   const timers = useRef<Set<number>>(new Set());
   const animationFrames = useRef<Set<number>>(new Set());
@@ -90,10 +92,10 @@ export function SiteTransition({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!transitionsEnabled) return;
-    if (previousPathname.current === pathname) return;
+    if (previousRouteKey.current === routeKey) return;
 
     const cameFromHistory = pendingNavigation.current === "history";
-    previousPathname.current = pathname;
+    previousRouteKey.current = routeKey;
     pendingNavigation.current = null;
 
     if (reducedMotion.current) {
@@ -102,7 +104,7 @@ export function SiteTransition({ children }: { children: ReactNode }) {
     }
 
     schedule(enterPage, cameFromHistory ? PAGE_TRANSITION_MS : 0);
-  }, [changePagePhase, enterPage, pathname, schedule, transitionsEnabled]);
+  }, [changePagePhase, enterPage, routeKey, schedule, transitionsEnabled]);
 
   useEffect(() => {
     if (!transitionsEnabled) return;
