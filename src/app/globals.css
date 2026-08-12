@@ -216,7 +216,7 @@ img { display: block; max-width: 100%; }
 }
 
 .brand { width: 185px; height: 68px; overflow: hidden; display: flex; align-items: center; }
-.brand img { width: 190px; transform: scale(1.34); transform-origin: 34% center; }
+.brand img { width: 190px; transform: translateY(11px) scale(1.34); transform-origin: 34% center; }
 
 .desktop-nav { display: flex; align-items: center; gap: clamp(24px, 3vw, 46px); font-size: 13px; font-weight: 600; }
 .desktop-nav a { position: relative; padding: 12px 0; }
@@ -474,7 +474,7 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
   .site-header { min-height: 74px; }
   .site-header::before { height: 74px; }
   .brand { width: 142px; height: 56px; }
-  .brand img { width: 150px; transform: scale(1.34); }
+  .brand img { width: 150px; transform: translateY(9px) scale(1.34); }
   .site-header > .button { min-height: 40px; padding: 0 15px; font-size: 11px; }
   .hero { grid-template-columns: 1fr; min-height: auto; padding: 50px 0 80px; }
   h1 { font-size: clamp(48px, 14vw, 66px); }
