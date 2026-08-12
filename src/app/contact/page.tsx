@@ -45,7 +45,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           <SectionLabel>Écrivez-nous</SectionLabel>
           <h2>Quelques mots suffisent pour commencer.</h2>
           <div className="contact-layout">
-            <ContactForm initialProfile={initialProfile} />
+            <ContactForm initialProfile={initialProfile} key={initialProfile} />
             <aside className="contact-aside">
               <section className="next-steps">
                 <h3>Et après ?</h3>

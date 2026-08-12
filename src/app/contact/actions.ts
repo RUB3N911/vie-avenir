@@ -8,6 +8,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export type ContactActionState = {
   status: "idle" | "error" | "success";
   message: string;
+  field?: string;
 };
 
 const optionalAge = z.preprocess(
@@ -28,7 +29,7 @@ const contactSchema = z.object({
   message: z.string().trim().min(20, "Votre message doit contenir au moins 20 caractères.").max(5000),
   consent: z.string().refine((value) => value === "on", "Vous devez accepter l’utilisation de vos informations pour recevoir une réponse."),
   guardian_ack: z.string().optional(),
-  website: z.string().max(0),
+  website: z.string().max(0, "Une vérification anti-spam a bloqué l’envoi. Rechargez la page puis réessayez."),
 }).superRefine((value, context) => {
   if (value.profile === "young" && (value.age == null || value.age < 14 || value.age > 25)) {
     context.addIssue({ code: "custom", path: ["age"], message: "Ce parcours est réservé aux jeunes de 14 à 25 ans." });
@@ -51,14 +52,36 @@ export async function submitContactRequest(
   _previousState: ContactActionState,
   formData: FormData,
 ): Promise<ContactActionState> {
+  const startedAt = Date.now();
   const result = contactSchema.safeParse(Object.fromEntries(formData));
   if (!result.success) {
-    return { status: "error", message: result.error.issues[0]?.message ?? "Formulaire invalide." };
+    const issue = result.error.issues[0];
+    console.warn(JSON.stringify({
+      level: "warn",
+      message: "contact.validation_failed",
+      profile: String(formData.get("profile") ?? "unknown").slice(0, 32),
+      field: String(issue?.path[0] ?? "form"),
+      code: issue?.code ?? "unknown",
+      duration_ms: Date.now() - startedAt,
+    }));
+    return {
+      status: "error",
+      message: issue?.message ?? "Formulaire invalide.",
+      field: String(issue?.path[0] ?? "form"),
+    };
   }
 
   const values = result.data;
   const supabase = await createSupabaseServerClient();
-  if (!supabase) return { status: "error", message: "L’envoi est momentanément indisponible." };
+  if (!supabase) {
+    console.error(JSON.stringify({
+      level: "error",
+      message: "contact.supabase_unavailable",
+      profile: values.profile,
+      duration_ms: Date.now() - startedAt,
+    }));
+    return { status: "error", message: "L’envoi est momentanément indisponible." };
+  }
 
   const details: Record<string, string> = {
     request_type: values.request_type,
@@ -80,10 +103,22 @@ export async function submitContactRequest(
   });
 
   if (error) {
-    console.error("Impossible d’enregistrer la demande", error.message);
+    console.error(JSON.stringify({
+      level: "error",
+      message: "contact.insert_failed",
+      profile: values.profile,
+      error_code: error.code,
+      duration_ms: Date.now() - startedAt,
+    }));
     return { status: "error", message: "Votre demande n’a pas pu être envoyée. Réessayez dans quelques instants." };
   }
 
+  console.info(JSON.stringify({
+    level: "info",
+    message: "contact.insert_succeeded",
+    profile: values.profile,
+    duration_ms: Date.now() - startedAt,
+  }));
   revalidatePath("/admin/demandes");
   return { status: "success", message: "Merci, votre demande a bien été transmise à VIE AVENIR." };
 }
