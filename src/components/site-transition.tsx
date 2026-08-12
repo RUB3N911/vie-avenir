@@ -149,7 +149,11 @@ export function SiteTransition({ children }: { children: ReactNode }) {
     };
 
     const handleHistoryNavigation = () => {
+      const destination = new URL(window.location.href);
+      const destinationRouteKey = `${destination.pathname}?${destination.searchParams.toString()}`;
+
       if (
+        previousRouteKey.current === destinationRouteKey ||
         reducedMotion.current ||
         loaderPhaseRef.current !== "hidden" ||
         pagePhaseRef.current !== "entered"
