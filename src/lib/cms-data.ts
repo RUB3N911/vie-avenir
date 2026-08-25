@@ -106,7 +106,7 @@ export async function getAssociationSettings(): Promise<AssociationSettings> {
   const { data, error } = await supabase
     .from("association_settings")
     .select(
-      "legal_name, association_status, public_email, phone, whatsapp, address, postal_code, city, rna_number, instagram_url, tiktok_url, website_url",
+      "legal_name, association_status, public_email, phone, whatsapp, address, postal_code, city, rna_number, instagram_url, tiktok_url, facebook_url, linkedin_url, website_url",
     )
     .eq("id", true)
     .maybeSingle();

@@ -9,7 +9,7 @@ export default async function AdminDashboardPage() {
   const published = events.filter((event) => event.publication_status === "published");
   const drafts = events.filter((event) => event.publication_status === "draft");
   const nextEvent = pickNextEvent([...published].sort((a, b) => a.starts_at.localeCompare(b.starts_at)));
-  const infoValues = [settings.public_email, settings.phone, settings.address, settings.rna_number, settings.instagram_url, settings.tiktok_url];
+  const infoValues = [settings.public_email, settings.phone, settings.address, settings.rna_number, settings.instagram_url, settings.tiktok_url, settings.facebook_url, settings.linkedin_url];
   const completion = Math.round((infoValues.filter(Boolean).length / infoValues.length) * 100);
 
   return (
@@ -24,7 +24,7 @@ export default async function AdminDashboardPage() {
 
       <div className="admin-dashboard-grid">
         <section className="admin-panel admin-next-event"><div className="admin-panel-heading"><div><p className="admin-eyebrow">Prochain rendez-vous</p><h2>{nextEvent?.title ?? "Aucun événement publié"}</h2></div><Link href="/admin/evenements">Tout voir →</Link></div>{nextEvent ? <div className="admin-next-event-content"><div className="admin-date-block"><strong>{formatEventDate(nextEvent.starts_at).day}</strong><span>{formatEventDate(nextEvent.starts_at).month}<br />{formatEventDate(nextEvent.starts_at).year}</span></div><div><p>{nextEvent.summary}</p><span>{nextEvent.venue_name ?? "Lieu à confirmer"} · {nextEvent.city}</span></div><Link href={`/admin/evenements/${nextEvent.id}`}>Modifier</Link></div> : <p className="admin-empty-copy">Créez un événement, puis passez sa visibilité sur « Publié ».</p>}</section>
-        <section className="admin-panel admin-checklist"><div className="admin-panel-heading"><div><p className="admin-eyebrow">À compléter</p><h2>Informations officielles</h2></div><Link href="/admin/informations">Modifier →</Link></div><ul><li className={settings.public_email ? "is-done" : ""}><span>{settings.public_email ? "✓" : "1"}</span>Adresse e-mail publique</li><li className={settings.rna_number ? "is-done" : ""}><span>{settings.rna_number ? "✓" : "2"}</span>Numéro RNA</li><li className={settings.address ? "is-done" : ""}><span>{settings.address ? "✓" : "3"}</span>Adresse du siège</li><li className={settings.instagram_url || settings.tiktok_url ? "is-done" : ""}><span>{settings.instagram_url || settings.tiktok_url ? "✓" : "4"}</span>Réseaux sociaux</li></ul></section>
+        <section className="admin-panel admin-checklist"><div className="admin-panel-heading"><div><p className="admin-eyebrow">À compléter</p><h2>Informations officielles</h2></div><Link href="/admin/informations">Modifier →</Link></div><ul><li className={settings.public_email ? "is-done" : ""}><span>{settings.public_email ? "✓" : "1"}</span>Adresse e-mail publique</li><li className={settings.rna_number ? "is-done" : ""}><span>{settings.rna_number ? "✓" : "2"}</span>Numéro RNA</li><li className={settings.address ? "is-done" : ""}><span>{settings.address ? "✓" : "3"}</span>Adresse du siège</li><li className={settings.instagram_url || settings.tiktok_url || settings.facebook_url || settings.linkedin_url ? "is-done" : ""}><span>{settings.instagram_url || settings.tiktok_url || settings.facebook_url || settings.linkedin_url ? "✓" : "4"}</span>Réseaux sociaux</li></ul></section>
       </div>
     </main>
   );
