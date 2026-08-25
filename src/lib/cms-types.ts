@@ -117,6 +117,43 @@ export type EventRecord = {
   updated_at: string;
 };
 
+export type GalleryMediaType = "photo" | "video";
+
+export type GalleryMedia = {
+  id: string;
+  album_id: string;
+  media_type: GalleryMediaType;
+  file_url: string;
+  storage_path: string;
+  title: string | null;
+  caption: string | null;
+  alt_text: string | null;
+  mime_type: string;
+  file_size: number;
+  display_order: number;
+  is_cover: boolean;
+  published: boolean;
+  consent_confirmed: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type GalleryAlbumEvent = Pick<EventRecord, "id" | "slug" | "title" | "starts_at">;
+
+export type GalleryAlbum = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  event_id: string | null;
+  published: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+  event: GalleryAlbumEvent | null;
+  media: GalleryMedia[];
+};
+
 export type AssociationSettings = {
   legal_name: string;
   association_status: string | null;

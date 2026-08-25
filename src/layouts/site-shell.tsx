@@ -98,6 +98,7 @@ export async function SiteFooter() {
         <Link href="/notre-mission">Mission</Link>
         <Link href="/nos-actions">Actions</Link>
         <Link href="/evenements">Événements</Link>
+        <Link href="/galerie">Galerie</Link>
         <Link href="/partenaires">Partenaires</Link>
         <Link href="/contact">Contact</Link>
       </nav>

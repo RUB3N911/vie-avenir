@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { defaultAssociationSettings, defaultEvent, defaultProgram } from "@/data/cms-defaults";
 import { legalPageDefaults } from "@/data/legal-page-defaults";
 import { defaultSitePresentation } from "@/data/trust-content-defaults";
@@ -8,6 +9,9 @@ import type {
   ConfirmedPartner,
   ContactRequestRecord,
   EventRecord,
+  GalleryAlbum,
+  GalleryAlbumEvent,
+  GalleryMedia,
   LegalPageRecord,
   LegalPageSection,
   LegalPageSlug,
@@ -44,9 +48,30 @@ export async function getNextPublishedEvent() {
   return pickNextEvent(events);
 }
 
+export const getPublishedEventBySlug = cache(async function getPublishedEventBySlug(slug: string): Promise<EventRecord | null> {
+  if (!isSupabaseConfigured()) return defaultEvent.slug === slug ? defaultEvent : null;
+
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return defaultEvent.slug === slug ? defaultEvent : null;
+
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("slug", slug)
+    .eq("publication_status", "published")
+    .maybeSingle();
+
+  if (error) {
+    console.error(`Impossible de charger l’événement ${slug}`, error.message);
+    return null;
+  }
+
+  return data ? normalizeEventRecord(data) : null;
+});
+
 export function pickNextEvent(events: EventRecord[]) {
   const now = Date.now();
-  return events.find((event) => new Date(event.starts_at).getTime() >= now) ?? events[0] ?? null;
+  return events.find((event) => new Date(event.starts_at).getTime() >= now) ?? events.at(-1) ?? null;
 }
 
 export async function getAllEventsForAdmin(): Promise<EventRecord[]> {
@@ -97,6 +122,82 @@ function normalizeEventRecord(record: Record<string, unknown>): EventRecord {
     ...record,
     program: normalizeProgram(record.program),
   } as EventRecord;
+}
+
+type GalleryAlbumRow = Omit<GalleryAlbum, "event" | "media"> & {
+  events: GalleryAlbumEvent | GalleryAlbumEvent[] | null;
+};
+
+function normalizeGalleryAlbum(row: GalleryAlbumRow, media: GalleryMedia[]): GalleryAlbum {
+  const event = Array.isArray(row.events) ? row.events[0] ?? null : row.events;
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    description: row.description,
+    event_id: row.event_id,
+    published: row.published,
+    display_order: row.display_order,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    event,
+    media: media.filter((item) => item.album_id === row.id),
+  };
+}
+
+async function getGalleryAlbums(publishedOnly: boolean): Promise<GalleryAlbum[]> {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+
+  let albumsQuery = supabase
+    .from("gallery_albums")
+    .select("*, events(id, slug, title, starts_at)")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: false });
+  let mediaQuery = supabase
+    .from("gallery_media")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (publishedOnly) {
+    albumsQuery = albumsQuery.eq("published", true);
+    mediaQuery = mediaQuery.eq("published", true).eq("consent_confirmed", true);
+  }
+
+  const [{ data: albumRows, error: albumError }, { data: mediaRows, error: mediaError }] =
+    await Promise.all([albumsQuery, mediaQuery]);
+
+  if (albumError || mediaError) {
+    const message = albumError?.message ?? mediaError?.message ?? "Erreur inconnue";
+    if (publishedOnly) {
+      console.error("Impossible de charger la galerie", message);
+      return [];
+    }
+    throw new Error(message);
+  }
+
+  const media = (mediaRows ?? []) as GalleryMedia[];
+  return ((albumRows ?? []) as GalleryAlbumRow[]).map((row) => normalizeGalleryAlbum(row, media));
+}
+
+export function getPublishedGalleryAlbums() {
+  return getGalleryAlbums(true);
+}
+
+export function getGalleryAlbumsForAdmin() {
+  return getGalleryAlbums(false);
+}
+
+export const getPublishedGalleryAlbumBySlug = cache(async function getPublishedGalleryAlbumBySlug(slug: string): Promise<GalleryAlbum | null> {
+  const albums = await getPublishedGalleryAlbums();
+  return albums.find((album) => album.slug === slug) ?? null;
+});
+
+export async function getGalleryAlbumForAdmin(id: string): Promise<GalleryAlbum | null> {
+  const albums = await getGalleryAlbumsForAdmin();
+  return albums.find((album) => album.id === id) ?? null;
 }
 
 export async function getAssociationSettings(): Promise<AssociationSettings> {

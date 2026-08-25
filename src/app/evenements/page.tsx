@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { EventsCalendar } from "@/components/events-calendar";
 import { Arrow, Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
-import { defaultProgram } from "@/data/cms-defaults";
 import { formatEventDate, getPublishedEvents, pickNextEvent } from "@/lib/cms-data";
-import type { EventRecord } from "@/lib/cms-types";
 
 export const metadata: Metadata = {
   title: "Événements",
@@ -13,37 +12,16 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const tones = ["pink", "orange", "yellow", "green"] as const;
-
 const formats = [
   ["Rencontres métiers", "Découvrir des métiers grâce à celles et ceux qui les vivent vraiment.", "pink"],
   ["La vie active", "Comprendre la paie, le logement, le budget et les démarches essentielles.", "orange"],
   ["La Voix de l’Avenir", "Partager ses idées et contribuer aux projets qui concernent la jeunesse.", "green"],
 ] as const;
 
-function registrationLabel(event: EventRecord) {
-  if (event.registration_status === "open" && event.registration_url) return "Je m’inscris";
-  if (event.registration_status === "full") return "Événement complet";
-  if (event.registration_status === "cancelled") return "Événement annulé";
-  if (event.registration_status === "closed") return "Inscriptions closes";
-  return "Être informé·e";
-}
-
-function EventAction({ event, className }: { event: EventRecord; className: string }) {
-  const label = registrationLabel(event);
-  if (event.registration_status === "open" && event.registration_url) {
-    return <a className={className} href={event.registration_url} target="_blank" rel="noreferrer">{label} <Arrow /></a>;
-  }
-  return <Link className={className} href="/contact?profil=young#formulaire">{label} <Arrow /></Link>;
-}
-
 export default async function EventsPage() {
   const events = await getPublishedEvents();
   const nextEvent = pickNextEvent(events);
   const date = nextEvent ? formatEventDate(nextEvent.starts_at) : null;
-  const program = nextEvent?.program.length
-    ? nextEvent.program.slice(0, 4)
-    : defaultProgram;
 
   return (
     <main>
@@ -59,7 +37,7 @@ export default async function EventsPage() {
             <p>{nextEvent.summary}</p>
             <div className="event-page-actions">
               <span>{nextEvent.venue_name ?? "Lieu à confirmer"} · {nextEvent.city}</span>
-              <EventAction className="button button-pink" event={nextEvent} />
+              <Link className="button button-pink" href={`/evenements/${nextEvent.slug}`}>Voir le détail <Arrow /></Link>
             </div>
           </div>
         </section>
@@ -67,20 +45,15 @@ export default async function EventsPage() {
         <section className="event-page-empty-hero"><p>Événements</p><h1>La suite se prépare.</h1><span>Revenez bientôt pour découvrir les prochains rendez-vous VIE AVENIR.</span></section>
       )}
 
-      {nextEvent ? (
+      {events.length ? (
         <section className="page-section">
           <div className="page-container">
-            <SectionLabel>Au programme</SectionLabel>
-            <h2>Un atelier qui bouge avec toi.</h2>
-            <ol className="event-steps">
-              {program.map((item, index) => (
-                <li className={`tone-${tones[index]}`} key={`${item.title}-${index}`}>
-                  <strong>{index + 1}</strong>
-                  <h3>{item.title}</h3>
-                  {item.description ? <p>{item.description}</p> : null}
-                </li>
-              ))}
-            </ol>
+            <SectionLabel>Calendrier</SectionLabel>
+            <div className="section-heading-row">
+              <h2>Tous les rendez-vous, en un coup d’œil.</h2>
+              <p>Choisis une date puis ouvre la fiche de l’événement pour retrouver toutes les informations.</p>
+            </div>
+            <EventsCalendar events={events} initialDate={nextEvent?.starts_at} />
           </div>
         </section>
       ) : null}
@@ -94,7 +67,7 @@ export default async function EventsPage() {
               {events.map((event) => {
                 const itemDate = formatEventDate(event.starts_at);
                 return (
-                  <article className="published-event-card" id={`fiche-${event.slug}`} key={event.id}>
+                  <Link className="published-event-card" href={`/evenements/${event.slug}`} id={`fiche-${event.slug}`} key={event.id}>
                     <div className={`published-event-visual ${event.image_url ? "has-image" : ""}`}>
                       {event.image_url ? <Image src={event.image_url} alt={`Visuel de l’événement ${event.title}`} fill sizes="(max-width: 780px) 100vw, 50vw" /> : <><span>{itemDate.day}</span><strong>{itemDate.month}<br />{itemDate.year}</strong></>}
                     </div>
@@ -103,10 +76,9 @@ export default async function EventsPage() {
                       <h3>{event.title}</h3>
                       <p>{event.summary}</p>
                       <ul><li>{event.age_min} à {event.age_max} ans</li><li>{event.venue_name ?? "Lieu à confirmer"} · {event.city}</li>{event.capacity ? <li>{event.capacity} places</li> : null}</ul>
-                      {event.access_details ? <small>{event.access_details}</small> : null}
-                      <EventAction className="button button-dark" event={event} />
+                      <span className="button button-dark">Voir le détail <Arrow /></span>
                     </div>
-                  </article>
+                  </Link>
                 );
               })}
             </div>
@@ -128,20 +100,6 @@ export default async function EventsPage() {
           </div>
         </div>
       </section>
-
-      {nextEvent ? (
-        <section className="page-section practical-section">
-          <div className="page-container">
-            <SectionLabel>En pratique</SectionLabel>
-            <div className="practical-grid">
-              <article><h3>Pour qui ?</h3><p>Jeunes de {nextEvent.age_min} à {nextEvent.age_max} ans</p></article>
-              <article><h3>Où ?</h3><p>{nextEvent.venue_name ?? "Lieu à confirmer"} · {nextEvent.city}</p></article>
-              <article><h3>Quand ?</h3><p>{formatEventDate(nextEvent.starts_at).long}</p></article>
-              <article><h3>Tarif</h3><p>{nextEvent.price_label}</p></article>
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       <Callout eyebrow="Ne manque pas le prochain rendez-vous" title="Ton avenir vient de t’appeler." buttonLabel="Je reste informé·e" href="/contact?profil=young#formulaire" />
       <SiteFooter />
