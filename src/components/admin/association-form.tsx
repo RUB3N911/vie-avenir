@@ -29,7 +29,7 @@ export function AssociationForm({ settings }: { settings: AssociationSettings })
         <div className="admin-form-card-heading"><span>02</span><div><h2>Contacts</h2><p>Les champs vides ne seront jamais affichés comme « à compléter ».</p></div></div>
         <div className="admin-fields-grid">
           <label className="admin-field"><span>Téléphone</span><input name="phone" type="tel" defaultValue={settings.phone ?? ""} /></label>
-          <label className="admin-field"><span>WhatsApp</span><input name="whatsapp" type="tel" defaultValue={settings.whatsapp ?? ""} /></label>
+          <label className="admin-field"><span>Message WhatsApp <small>— facultatif</small></span><textarea name="whatsapp" rows={4} maxLength={500} defaultValue={settings.whatsapp ?? ""} placeholder="Bonjour, je souhaite en savoir plus sur VIE AVENIR." /><small className="admin-field-note">Le lien WhatsApp est créé automatiquement avec le numéro de téléphone renseigné.</small></label>
           <label className="admin-field admin-field-wide"><span>Site officiel</span><input name="website_url" type="url" defaultValue={settings.website_url ?? ""} placeholder="https://…" /></label>
           <label className="admin-field"><span>Instagram</span><input name="instagram_url" type="url" defaultValue={settings.instagram_url ?? ""} placeholder="https://instagram.com/…" /></label>
           <label className="admin-field"><span>TikTok</span><input name="tiktok_url" type="url" defaultValue={settings.tiktok_url ?? ""} placeholder="https://tiktok.com/@…" /></label>
