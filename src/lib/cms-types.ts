@@ -129,5 +129,7 @@ export type AssociationSettings = {
   rna_number: string | null;
   instagram_url: string | null;
   tiktok_url: string | null;
+  facebook_url: string | null;
+  linkedin_url: string | null;
   website_url: string | null;
 };

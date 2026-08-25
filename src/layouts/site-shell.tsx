@@ -71,6 +71,8 @@ export async function SiteFooter() {
     settings.phone ? { href: `tel:${settings.phone.replace(/\s/g, "")}`, label: settings.phone } : null,
     settings.instagram_url ? { href: settings.instagram_url, label: "Instagram" } : null,
     settings.tiktok_url ? { href: settings.tiktok_url, label: "TikTok" } : null,
+    settings.facebook_url ? { href: settings.facebook_url, label: "Facebook" } : null,
+    settings.linkedin_url ? { href: settings.linkedin_url, label: "LinkedIn" } : null,
   ].filter((item): item is { href: string; label: string } => Boolean(item));
 
   return (

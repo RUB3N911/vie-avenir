@@ -33,6 +33,8 @@ const associationSchema = z.object({
   rna_number: z.string().trim().max(30),
   instagram_url: optionalUrl,
   tiktok_url: optionalUrl,
+  facebook_url: optionalUrl,
+  linkedin_url: optionalUrl,
   website_url: optionalUrl,
 });
 
@@ -187,6 +189,8 @@ export async function saveAssociationSettings(
     rna_number: emptyToNull(values.rna_number),
     instagram_url: emptyToNull(values.instagram_url),
     tiktok_url: emptyToNull(values.tiktok_url),
+    facebook_url: emptyToNull(values.facebook_url),
+    linkedin_url: emptyToNull(values.linkedin_url),
     website_url: emptyToNull(values.website_url),
     updated_by: admin.id,
   });
@@ -195,6 +199,7 @@ export async function saveAssociationSettings(
 
   revalidatePath("/admin");
   revalidatePath("/admin/informations");
+  revalidatePath("/", "layout");
   revalidatePath("/mentions-legales");
   revalidatePath("/politique-confidentialite");
   return { status: "success", message: "Les informations de l’association sont enregistrées." };

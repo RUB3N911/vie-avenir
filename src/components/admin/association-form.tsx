@@ -33,6 +33,8 @@ export function AssociationForm({ settings }: { settings: AssociationSettings })
           <label className="admin-field admin-field-wide"><span>Site officiel</span><input name="website_url" type="url" defaultValue={settings.website_url ?? ""} placeholder="https://…" /></label>
           <label className="admin-field"><span>Instagram</span><input name="instagram_url" type="url" defaultValue={settings.instagram_url ?? ""} placeholder="https://instagram.com/…" /></label>
           <label className="admin-field"><span>TikTok</span><input name="tiktok_url" type="url" defaultValue={settings.tiktok_url ?? ""} placeholder="https://tiktok.com/@…" /></label>
+          <label className="admin-field"><span>Facebook</span><input name="facebook_url" type="url" defaultValue={settings.facebook_url ?? ""} placeholder="https://facebook.com/…" /></label>
+          <label className="admin-field"><span>LinkedIn</span><input name="linkedin_url" type="url" defaultValue={settings.linkedin_url ?? ""} placeholder="https://linkedin.com/company/…" /></label>
         </div>
       </section>
 

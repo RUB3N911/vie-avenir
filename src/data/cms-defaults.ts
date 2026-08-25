@@ -27,6 +27,8 @@ export const defaultAssociationSettings: AssociationSettings = {
   rna_number: null,
   instagram_url: null,
   tiktok_url: null,
+  facebook_url: null,
+  linkedin_url: null,
   website_url: "https://vie-avenir.vercel.app",
 };
 
