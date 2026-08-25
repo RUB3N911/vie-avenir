@@ -98,6 +98,7 @@
 .admin-field > span b { color: var(--admin-pink); }
 .admin-field input, .admin-field textarea, .admin-field select, .admin-danger-zone input, .admin-login-form input { width: 100%; min-height: 44px; padding: 10px 13px; border: 1px solid #d9deea; border-radius: 10px; outline: none; background: #fff; color: var(--admin-navy); font: 500 12px/1.45 Poppins,sans-serif; transition: border .2s, box-shadow .2s; }
 .admin-field textarea { resize: vertical; }
+.admin-field-note { color: #697386; font-size: 9px; line-height: 1.5; }
 .admin-field input:focus, .admin-field textarea:focus, .admin-field select:focus, .admin-danger-zone input:focus, .admin-login-form input:focus { border-color: var(--admin-pink); box-shadow: 0 0 0 3px rgba(230,0,126,.09); }
 .admin-field input::placeholder, .admin-field textarea::placeholder { color: #a6adba; }
 .admin-file-field input { padding: 9px; border-style: dashed; background: #fafbfe; }

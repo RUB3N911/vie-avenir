@@ -26,7 +26,7 @@ const associationSchema = z.object({
   association_status: z.string().trim().max(120),
   public_email: z.union([z.literal(""), z.email("Adresse e-mail invalide.")]),
   phone: z.string().trim().max(30),
-  whatsapp: z.string().trim().max(30),
+  whatsapp: z.string().trim().max(500, "Le message WhatsApp ne doit pas dépasser 500 caractères."),
   address: z.string().trim().max(200),
   postal_code: z.string().trim().max(12),
   city: z.string().trim().min(2, "La commune ou le territoire est requis."),
@@ -199,6 +199,7 @@ export async function saveAssociationSettings(
 
   revalidatePath("/admin");
   revalidatePath("/admin/informations");
+  revalidatePath("/contact");
   revalidatePath("/", "layout");
   revalidatePath("/mentions-legales");
   revalidatePath("/politique-confidentialite");

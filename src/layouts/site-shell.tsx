@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { navigation, type NavigationPath } from "@/data/navigation";
 import { getAssociationSettings } from "@/lib/cms-data";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 type SiteHeaderProps = {
   activePath?: NavigationPath | "/contact";
@@ -104,10 +105,11 @@ export function SiteHeader({ activePath }: SiteHeaderProps) {
 
 export async function SiteFooter() {
   const settings = await getAssociationSettings();
+  const whatsappUrl = buildWhatsAppUrl(settings.phone, settings.whatsapp);
   const publicContacts = [
-    settings.public_email ? { href: `mailto:${settings.public_email}`, label: settings.public_email } : null,
-    settings.phone ? { href: `tel:${settings.phone.replace(/\s/g, "")}`, label: settings.phone } : null,
-  ].filter((item): item is { href: string; label: string } => Boolean(item));
+    settings.public_email ? { href: `mailto:${settings.public_email}`, label: settings.public_email, external: false } : null,
+    whatsappUrl ? { href: whatsappUrl, label: "WhatsApp", external: true } : null,
+  ].filter((item): item is { href: string; label: string; external: boolean } => Boolean(item));
   const socialLinks = [
     settings.instagram_url ? { href: settings.instagram_url, label: "Instagram", network: "instagram" as const } : null,
     settings.tiktok_url ? { href: settings.tiktok_url, label: "TikTok", network: "tiktok" as const } : null,
@@ -130,7 +132,16 @@ export async function SiteFooter() {
         <p>Des rencontres qui changent des trajectoires.</p>
         {publicContacts.length ? (
           <div className="footer-contact-links">
-            {publicContacts.map((item) => <a href={item.href} key={item.href}>{item.label}</a>)}
+            {publicContacts.map((item) => (
+              <a
+                href={item.href}
+                key={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
           </div>
         ) : null}
         {socialLinks.length ? (
