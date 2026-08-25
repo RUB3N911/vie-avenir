@@ -11,6 +11,7 @@ export const siteConfig = {
     "/notre-mission",
     "/nos-actions",
     "/evenements",
+    "/galerie",
     "/partenaires",
     "/contact",
     "/mentions-legales",

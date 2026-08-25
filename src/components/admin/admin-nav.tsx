@@ -7,6 +7,7 @@ const items = [
   { href: "/admin", label: "Tableau de bord", icon: "⌂" },
   { href: "/admin/informations", label: "L’association", icon: "VA" },
   { href: "/admin/evenements", label: "Événements", icon: "◫" },
+  { href: "/admin/galerie", label: "Galerie", icon: "▧" },
   { href: "/admin/demandes", label: "Demandes", icon: "✉" },
   { href: "/admin/contenus", label: "Contenus", icon: "✦" },
   { href: "/admin/pages-juridiques", label: "Pages juridiques", icon: "§" },
