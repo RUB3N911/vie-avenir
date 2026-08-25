@@ -5,6 +5,7 @@ import { contactJourneys, contactProfiles } from "@/data/contact-journeys";
 import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 import { getAssociationSettings } from "@/lib/cms-data";
 import type { ContactProfile } from "@/lib/cms-types";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "Nous rejoindre",
@@ -16,6 +17,7 @@ export const dynamic = "force-dynamic";
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ profil?: string }> }) {
   const [settings, query] = await Promise.all([getAssociationSettings(), searchParams]);
   const initialProfile = contactProfiles.includes(query.profil as ContactProfile) ? query.profil as ContactProfile : "young";
+  const whatsappUrl = buildWhatsAppUrl(settings.phone, settings.whatsapp);
   return (
     <main>
       <SiteHeader activePath="/contact" />
@@ -58,7 +60,13 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
               <section className="contact-details">
                 <h3>Contacter l’association</h3>
                 <strong>{settings.legal_name}<br />{settings.city}</strong>
-                {settings.public_email ? <p><a href={`mailto:${settings.public_email}`}>{settings.public_email}</a>{settings.phone ? <><br /><a href={`tel:${settings.phone.replace(/\s/g, "")}`}>{settings.phone}</a></> : null}</p> : <p>Pour participer, proposer un métier ou construire un partenariat, utilisez le formulaire en ligne.</p>}
+                {settings.public_email || whatsappUrl ? (
+                  <p>
+                    {settings.public_email ? <a href={`mailto:${settings.public_email}`}>{settings.public_email}</a> : null}
+                    {settings.public_email && whatsappUrl ? <br /> : null}
+                    {whatsappUrl ? <a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a> : null}
+                  </p>
+                ) : <p>Pour participer, proposer un métier ou construire un partenariat, utilisez le formulaire en ligne.</p>}
                 <Link href="/politique-confidentialite">Comment vos données sont protégées <span aria-hidden="true">→</span></Link>
               </section>
             </aside>
