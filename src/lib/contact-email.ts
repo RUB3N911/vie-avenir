@@ -1,6 +1,5 @@
 import "server-only";
 
-import { Resend } from "resend";
 import type { ContactProfile } from "@/lib/cms-types";
 
 const DEFAULT_NOTIFICATION_EMAIL = "mouvementvieavenir@gmail.com";
@@ -26,6 +25,16 @@ export type ContactEmailRequest = {
   requestType: string;
   subject: string;
   message: string;
+};
+
+type EmailPayload = {
+  from: string;
+  to: string;
+  reply_to: string;
+  subject: string;
+  html: string;
+  text: string;
+  tags: Array<{ name: string; value: string }>;
 };
 
 function escapeHtml(value: string) {
@@ -169,23 +178,31 @@ function acknowledgementText(request: ContactEmailRequest) {
 }
 
 async function sendTrackedEmail(
-  resend: Resend,
+  apiKey: string,
   requestId: string,
   kind: "notification" | "acknowledgement",
-  payload: Parameters<Resend["emails"]["send"]>[0],
+  payload: EmailPayload,
 ) {
   try {
-    const result = await resend.emails.send(payload, {
-      idempotencyKey: `contact-${requestId}-${kind}`,
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `contact-${requestId}-${kind}`,
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
     });
+    const result = await response.json().catch(() => null) as { id?: string; name?: string } | null;
 
-    if (result.error) {
+    if (!response.ok) {
       console.error(JSON.stringify({
         level: "error",
         message: "contact.email_failed",
         request_id: requestId,
         email_kind: kind,
-        error_name: result.error.name,
+        error_name: result?.name || `http_${response.status}`,
       }));
       return;
     }
@@ -195,7 +212,7 @@ async function sendTrackedEmail(
       message: "contact.email_sent",
       request_id: requestId,
       email_kind: kind,
-      provider_id: result.data?.id,
+      provider_id: result?.id,
     }));
   } catch (error) {
     console.error(JSON.stringify({
@@ -223,14 +240,13 @@ export async function sendContactRequestEmails(request: ContactEmailRequest) {
     return;
   }
 
-  const resend = new Resend(apiKey);
   const safeSubject = normalizeHeader(request.subject);
 
   await Promise.all([
-    sendTrackedEmail(resend, request.id, "notification", {
+    sendTrackedEmail(apiKey, request.id, "notification", {
       from,
       to: notificationEmail,
-      replyTo: request.email,
+      reply_to: request.email,
       subject: normalizeHeader(`Nouvelle demande VIE AVENIR — ${safeSubject}`),
       html: notificationHtml(request),
       text: notificationText(request),
@@ -239,10 +255,10 @@ export async function sendContactRequestEmails(request: ContactEmailRequest) {
         { name: "profile", value: request.profile },
       ],
     }),
-    sendTrackedEmail(resend, request.id, "acknowledgement", {
+    sendTrackedEmail(apiKey, request.id, "acknowledgement", {
       from,
       to: request.email,
-      replyTo: notificationEmail,
+      reply_to: notificationEmail,
       subject: "VIE AVENIR — Nous avons bien reçu votre demande",
       html: acknowledgementHtml(request),
       text: acknowledgementText(request),
