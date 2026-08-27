@@ -170,3 +170,25 @@ export type AssociationSettings = {
   linkedin_url: string | null;
   website_url: string | null;
 };
+
+export type LinkHubIconName =
+  | "link"
+  | "spark"
+  | "calendar"
+  | "users"
+  | "briefcase"
+  | "heart"
+  | "gallery"
+  | "globe";
+
+export type LinkHubLink = {
+  id: string;
+  label: string;
+  url: string;
+  icon: LinkHubIconName;
+  is_featured: boolean;
+  published: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};

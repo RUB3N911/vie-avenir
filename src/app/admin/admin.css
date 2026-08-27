@@ -127,6 +127,16 @@
 .admin-danger-zone .admin-form-message { grid-column: 1 / -1; }
 .admin-danger-button { background: #b42318; box-shadow: none; }
 
+/* Page de liens */
+.admin-link-hub-note { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 7px 24px; align-items: center; padding: 22px 24px; border: 1px solid #f2d18b; border-radius: 17px; background: #fff9e9; }
+.admin-link-hub-note strong { font-size: 12px; }
+.admin-link-hub-note span { grid-column: 1; color: #74580d; font-family: Montserrat,sans-serif; font-size: 16px; font-weight: 800; }
+.admin-link-hub-note a { grid-column: 2; grid-row: 1 / 3; color: var(--admin-pink); font-size: 10px; font-weight: 800; }
+.admin-link-hub-list { display: grid; gap: 22px; }
+.admin-link-hub-list .admin-link-hub-form { border-radius: 18px 18px 0 0; box-shadow: none; }
+.admin-link-hub-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; align-self: end; }
+.admin-link-hub-form .admin-entry-actions { margin-top: 28px; padding-top: 20px; border-top: 1px solid #ebeff5; }
+
 /* Galerie */
 .admin-check-field { display: flex; gap: 11px; align-items: flex-start; padding: 14px; border: 1px solid var(--admin-line); border-radius: 12px; background: #fafbfe; }
 .admin-check-field > input { width: 18px; height: 18px; flex: 0 0 auto; margin: 1px 0 0; accent-color: var(--admin-pink); }
@@ -310,6 +320,9 @@
   .admin-gallery-media-options { grid-template-columns: 1fr; }
   .admin-gallery-media-delete { grid-column: 1; }
   .admin-gallery-uploader > .admin-primary-button { width: 100%; }
+  .admin-link-hub-note { grid-template-columns: 1fr; }
+  .admin-link-hub-note span, .admin-link-hub-note a { grid-column: 1; grid-row: auto; }
+  .admin-link-hub-options { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

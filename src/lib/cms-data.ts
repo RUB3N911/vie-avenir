@@ -4,6 +4,7 @@ import { cache } from "react";
 import { defaultAssociationSettings, defaultEvent, defaultProgram } from "@/data/cms-defaults";
 import { legalPageDefaults } from "@/data/legal-page-defaults";
 import { defaultSitePresentation } from "@/data/trust-content-defaults";
+import { defaultLinkHubLinks } from "@/data/link-hub-defaults";
 import type {
   AssociationSettings,
   ConfirmedPartner,
@@ -15,6 +16,7 @@ import type {
   LegalPageRecord,
   LegalPageSection,
   LegalPageSlug,
+  LinkHubLink,
   ProgramItem,
   SitePresentation,
   TeamMember,
@@ -46,6 +48,12 @@ export async function getPublishedEvents(): Promise<EventRecord[]> {
 export async function getNextPublishedEvent() {
   const events = await getPublishedEvents();
   return pickNextEvent(events);
+}
+
+export async function getUpcomingPublishedEvent() {
+  const events = await getPublishedEvents();
+  const now = Date.now();
+  return events.find((event) => new Date(event.starts_at).getTime() >= now) ?? null;
 }
 
 export const getPublishedEventBySlug = cache(async function getPublishedEventBySlug(slug: string): Promise<EventRecord | null> {
@@ -217,6 +225,40 @@ export async function getAssociationSettings(): Promise<AssociationSettings> {
 }
 
 export const getAssociationSettingsForAdmin = getAssociationSettings;
+
+export async function getPublishedLinkHubLinks(): Promise<LinkHubLink[]> {
+  if (!isSupabaseConfigured()) return defaultLinkHubLinks;
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return defaultLinkHubLinks;
+
+  const { data, error } = await supabase
+    .from("link_hub_links")
+    .select("*")
+    .eq("published", true)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Impossible de charger la page de liens", error.message);
+    return defaultLinkHubLinks;
+  }
+
+  return (data ?? []) as LinkHubLink[];
+}
+
+export async function getLinkHubLinksForAdmin(): Promise<LinkHubLink[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("link_hub_links")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as LinkHubLink[];
+}
 
 function normalizeLegalSections(value: unknown, fallback: LegalPageSection[]) {
   if (!Array.isArray(value)) return fallback;
