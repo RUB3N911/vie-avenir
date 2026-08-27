@@ -2,7 +2,7 @@ import "server-only";
 
 import type { ContactProfile } from "@/lib/cms-types";
 
-const DEFAULT_NOTIFICATION_EMAIL = "mouvementvieavenir@gmail.com";
+const DEFAULT_NOTIFICATION_EMAIL = "contact@vieavenir.fr";
 const DEFAULT_SITE_URL = "https://vieavenir.fr";
 
 const profileLabels: Record<ContactProfile, string> = {

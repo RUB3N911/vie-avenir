@@ -2,8 +2,8 @@
 
 Lorsqu'une demande est validée sur la page Contact, elle est d'abord enregistrée dans Supabase. Deux e-mails sont ensuite envoyés en arrière-plan :
 
-- une notification à l'association, avec l'adresse du demandeur en réponse directe ;
-- un accusé de réception au demandeur.
+- une notification envoyée à `contact@vieavenir.fr`, avec l'adresse du demandeur en réponse directe ;
+- un accusé de réception au demandeur, dont l'adresse de réponse est `contact@vieavenir.fr`.
 
 Si le service d'e-mail est momentanément indisponible, la demande reste consultable dans **Administration → Demandes**.
 
@@ -16,7 +16,7 @@ Si le service d'e-mail est momentanément indisponible, la demande reste consult
 
    - `RESEND_API_KEY` : la clé créée dans Resend ;
    - `RESEND_FROM_EMAIL` : `VIE AVENIR <notifications@vieavenir.fr>` ;
-   - `CONTACT_NOTIFICATION_EMAIL` : `mouvementvieavenir@gmail.com`.
+   - `CONTACT_NOTIFICATION_EMAIL` : `contact@vieavenir.fr`.
 
 5. Redéployer la dernière version de Production afin que les nouvelles variables soient prises en compte.
 6. Envoyer une demande de test avec une adresse e-mail accessible et vérifier les deux boîtes de réception ainsi que **Administration → Demandes**.
