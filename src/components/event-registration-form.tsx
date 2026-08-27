@@ -1,11 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import {
-  initialEventRegistrationState,
-  registerForEvent,
-} from "@/app/evenements/[slug]/registration-actions";
+import { registerForEvent } from "@/app/evenements/[slug]/registration-actions";
 import type { EventRecord } from "@/lib/cms-types";
+import { initialEventRegistrationState } from "@/lib/event-registration-state";
 
 export function EventRegistrationForm({ event }: { event: EventRecord }) {
   const actionWithEvent = registerForEvent.bind(null, event.id, event.slug);

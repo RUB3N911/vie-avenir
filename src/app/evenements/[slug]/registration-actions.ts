@@ -5,17 +5,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getPublishedEventBySlug } from "@/lib/cms-data";
 import { sendRegistrationCreatedEmails } from "@/lib/event-email";
+import type { EventRegistrationActionState } from "@/lib/event-registration-state";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-
-export type EventRegistrationActionState = {
-  status: "idle" | "error" | "confirmed" | "waitlisted";
-  message: string;
-};
-
-export const initialEventRegistrationState: EventRegistrationActionState = {
-  status: "idle",
-  message: "",
-};
 
 const registrationSchema = z.object({
   first_name: z.string().trim().min(2, "Le prénom est requis.").max(80),
