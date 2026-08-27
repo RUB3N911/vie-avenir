@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventParticipantMessageForm } from "@/components/admin/event-participant-message-form";
 import { EventRegistrationActions } from "@/components/admin/event-registration-actions";
+import { requireAdmin } from "@/lib/admin-auth";
 import {
   formatEventDate,
   getEventForAdmin,
@@ -43,6 +44,7 @@ function ageOnDate(birthDate: string, eventDate: string) {
 }
 
 export default async function EventRegistrationsAdminPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdmin();
   const { id } = await params;
   const [event, registrations, messages] = await Promise.all([
     getEventForAdmin(id),
