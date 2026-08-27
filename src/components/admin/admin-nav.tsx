@@ -8,6 +8,7 @@ const items = [
   { href: "/admin/informations", label: "L’association", icon: "VA" },
   { href: "/admin/evenements", label: "Événements", icon: "◫" },
   { href: "/admin/galerie", label: "Galerie", icon: "▧" },
+  { href: "/admin/liens", label: "Page de liens", icon: "↗" },
   { href: "/admin/demandes", label: "Demandes", icon: "✉" },
   { href: "/admin/contenus", label: "Contenus", icon: "✦" },
   { href: "/admin/pages-juridiques", label: "Pages juridiques", icon: "§" },

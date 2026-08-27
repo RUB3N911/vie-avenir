@@ -1,0 +1,48 @@
+import type { LinkHubLink } from "@/lib/cms-types";
+
+export const defaultLinkHubLinks: LinkHubLink[] = [
+  {
+    id: "default-join",
+    label: "Participer ou nous rejoindre",
+    url: "/contact",
+    icon: "users",
+    is_featured: true,
+    published: true,
+    display_order: 10,
+    created_at: "",
+    updated_at: "",
+  },
+  {
+    id: "default-mission",
+    label: "Découvrir notre mission",
+    url: "/notre-mission",
+    icon: "spark",
+    is_featured: false,
+    published: true,
+    display_order: 20,
+    created_at: "",
+    updated_at: "",
+  },
+  {
+    id: "default-events",
+    label: "Voir tous nos événements",
+    url: "/evenements",
+    icon: "calendar",
+    is_featured: false,
+    published: true,
+    display_order: 30,
+    created_at: "",
+    updated_at: "",
+  },
+  {
+    id: "default-gallery",
+    label: "Découvrir la galerie",
+    url: "/galerie",
+    icon: "gallery",
+    is_featured: false,
+    published: true,
+    display_order: 40,
+    created_at: "",
+    updated_at: "",
+  },
+];

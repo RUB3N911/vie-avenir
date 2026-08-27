@@ -12,6 +12,7 @@ export const siteConfig = {
     "/nos-actions",
     "/evenements",
     "/galerie",
+    "/liens",
     "/partenaires",
     "/contact",
     "/mentions-legales",
