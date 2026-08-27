@@ -1,8 +1,11 @@
 "use server";
 
+import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 import type { ContactProfile } from "@/lib/cms-types";
+import { sendContactRequestEmails } from "@/lib/contact-email";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type ContactActionState = {
@@ -88,7 +91,11 @@ export async function submitContactRequest(
   };
   if (values.role_or_job) details.role_or_job = values.role_or_job;
 
+  const requestId = randomUUID();
+  const createdAt = new Date().toISOString();
+
   const { error } = await supabase.from("contact_requests").insert({
+    id: requestId,
     profile: values.profile satisfies ContactProfile,
     name: values.name,
     email: values.email,
@@ -99,7 +106,7 @@ export async function submitContactRequest(
     message: values.message,
     details,
     status: "new",
-    consent_at: new Date().toISOString(),
+    consent_at: createdAt,
   });
 
   if (error) {
@@ -119,6 +126,24 @@ export async function submitContactRequest(
     profile: values.profile,
     duration_ms: Date.now() - startedAt,
   }));
+
+  after(async () => {
+    await sendContactRequestEmails({
+      id: requestId,
+      createdAt,
+      profile: values.profile,
+      name: values.name,
+      email: values.email,
+      phone: values.phone || null,
+      age: values.age,
+      organization: values.organization || null,
+      roleOrJob: values.role_or_job || null,
+      requestType: values.request_type,
+      subject: values.subject,
+      message: values.message,
+    });
+  });
+
   revalidatePath("/admin/demandes");
   return { status: "success", message: "Merci, votre demande a bien été transmise à VIE AVENIR." };
 }
