@@ -10,6 +10,8 @@ import type {
   ConfirmedPartner,
   ContactRequestRecord,
   EventRecord,
+  EventRegistrationMessage,
+  EventRegistrationRecord,
   GalleryAlbum,
   GalleryAlbumEvent,
   GalleryMedia,
@@ -82,6 +84,15 @@ export function pickNextEvent(events: EventRecord[]) {
   return events.find((event) => new Date(event.starts_at).getTime() >= now) ?? events.at(-1) ?? null;
 }
 
+export function isEventRegistrationAvailable(event: EventRecord) {
+  const now = Date.now();
+  const statusAllowsRegistration = event.registration_status === "open"
+    || (event.registration_status === "full" && !event.registration_url);
+  const beforeDeadline = !event.registration_deadline
+    || new Date(event.registration_deadline).getTime() >= now;
+  return statusAllowsRegistration && beforeDeadline && new Date(event.starts_at).getTime() > now;
+}
+
 export async function getAllEventsForAdmin(): Promise<EventRecord[]> {
   const supabase = await createSupabaseServerClient();
   if (!supabase) return [];
@@ -102,6 +113,35 @@ export async function getEventForAdmin(id: string): Promise<EventRecord | null> 
   const { data, error } = await supabase.from("events").select("*").eq("id", id).maybeSingle();
   if (error) throw new Error(error.message);
   return data ? normalizeEventRecord(data) : null;
+}
+
+export async function getEventRegistrationsForAdmin(eventId: string): Promise<EventRegistrationRecord[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("event_registrations")
+    .select("*")
+    .eq("event_id", eventId)
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as EventRegistrationRecord[];
+}
+
+export async function getEventRegistrationMessagesForAdmin(eventId: string): Promise<EventRegistrationMessage[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("event_registration_messages")
+    .select("*")
+    .eq("event_id", eventId)
+    .order("sent_at", { ascending: false })
+    .limit(20);
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as EventRegistrationMessage[];
 }
 
 function normalizeProgram(program: unknown): ProgramItem[] {
