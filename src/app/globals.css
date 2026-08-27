@@ -1070,6 +1070,42 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
 .event-detail-facts > p { margin: 20px 0 0; padding: 18px; border-radius: 14px; background: #fff; color: var(--ink-soft); font-size: 10px; line-height: 1.65; }
 .event-detail-facts > .button { width: 100%; margin-top: 24px; }
 
+.event-registration-section { scroll-margin-top: 90px; padding: clamp(70px,9vw,120px) 0; background: linear-gradient(135deg,#fff8f3,#f8f4f7 58%,#f3f8f1); }
+.event-registration-layout { display: grid; grid-template-columns: minmax(280px,.72fr) minmax(0,1.28fr); gap: clamp(40px,7vw,90px); align-items: start; }
+.event-registration-intro { position: sticky; top: 112px; }
+.event-registration-intro h2 { max-width: 520px; margin: 14px 0 22px; font-size: clamp(38px,4.6vw,62px); line-height: 1.02; letter-spacing: -.055em; }
+.event-registration-intro > p { max-width: 520px; margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.8; }
+.event-registration-intro ul { display: grid; gap: 14px; margin: 32px 0 0; padding: 0; list-style: none; }
+.event-registration-intro li { display: grid; grid-template-columns: 25px minmax(0,1fr); gap: 10px; align-items: start; color: var(--ink-soft); font-size: 10px; line-height: 1.6; }
+.event-registration-intro li::before { content: "✓"; display: grid; width: 23px; height: 23px; place-items: center; border-radius: 50%; background: #eaf8ee; color: #247a3e; font-size: 9px; font-weight: 900; }
+.event-registration-form { display: grid; gap: 23px; padding: clamp(24px,4vw,42px); border: 1px solid rgba(13,27,61,.1); border-radius: 28px; background: #fff; box-shadow: 0 22px 60px rgba(13,27,61,.09); }
+.event-registration-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 17px; }
+.event-registration-form label { display: grid; gap: 8px; }
+.event-registration-form label > span, .event-registration-guardian legend, .event-registration-wide > span { color: var(--navy); font-size: 9px; font-weight: 800; }
+.event-registration-form label b { color: var(--pink-text); }
+.event-registration-form input, .event-registration-form textarea { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid #d7dce6; border-radius: 11px; background: #fff; color: var(--navy); font: 500 11px Poppins,sans-serif; transition: border-color .2s ease,box-shadow .2s ease; }
+.event-registration-form textarea { min-height: 95px; resize: vertical; }
+.event-registration-form input:focus, .event-registration-form textarea:focus { border-color: var(--pink-action); outline: 0; box-shadow: 0 0 0 3px rgba(230,0,126,.1); }
+.event-registration-guardian { margin: 0; padding: 22px; border: 1px solid #e6e9ef; border-radius: 18px; background: #fafbfe; }
+.event-registration-guardian legend { padding: 0 7px; color: var(--pink-text); text-transform: uppercase; }
+.event-registration-guardian > p { margin: 0 0 18px; color: var(--ink-soft); font-size: 9px; line-height: 1.55; }
+.event-registration-guardian .event-registration-fields { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.event-registration-check { grid-template-columns: 19px minmax(0,1fr); gap: 11px !important; align-items: start; }
+.event-registration-check input { width: 18px; min-height: 18px; margin: 1px 0 0; accent-color: var(--pink-action); }
+.event-registration-check span { color: var(--ink-soft) !important; font-size: 9px !important; font-weight: 500 !important; line-height: 1.6; }
+.event-registration-check a { color: var(--pink-text); font-weight: 750; }
+.event-registration-form > .button { width: fit-content; border: 0; cursor: pointer; }
+.event-registration-form > .button:disabled { cursor: wait; opacity: .65; }
+.event-registration-form > small { color: var(--ink-soft); font-size: 8px; }
+.event-registration-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.event-registration-error { margin: 0; padding: 13px 15px; border: 1px solid #f0c5c1; border-radius: 11px; background: #fff5f4; color: #a61b12; font-size: 10px; line-height: 1.55; }
+.event-registration-result { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 18px; align-items: start; padding: 34px; border: 1px solid #bde3c7; border-radius: 24px; background: #fff; box-shadow: 0 22px 60px rgba(13,27,61,.09); }
+.event-registration-result > span { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 50%; background: #eaf8ee; color: #247a3e; font-size: 20px; font-weight: 900; }
+.event-registration-result.is-waitlisted { border-color: #f0d7b6; }
+.event-registration-result.is-waitlisted > span { background: #fff3e8; color: #a54f00; }
+.event-registration-result h3 { margin: 3px 0 8px; font-size: 24px; }
+.event-registration-result p { margin: 0; color: var(--ink-soft); font-size: 11px; line-height: 1.7; }
+
 /* Galerie publique */
 .gallery-hero, .gallery-album-hero { position: relative; padding: 105px max(32px,calc((100vw - 1180px)/2)) 115px; overflow: hidden; background: var(--navy); color: #fff; }
 .gallery-hero::after, .gallery-album-hero::after { content: ""; position: absolute; width: 420px; height: 420px; right: -130px; top: -160px; border: 70px solid rgba(230,0,126,.17); border-radius: 50%; }
@@ -1118,6 +1154,8 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
 @media (max-width: 900px) {
   .event-detail-layout { grid-template-columns: 1fr; }
   .event-detail-facts { position: static; }
+  .event-registration-layout { grid-template-columns: 1fr; }
+  .event-registration-intro { position: static; }
   .gallery-album-grid { grid-template-columns: 1fr; }
 }
 
@@ -1137,6 +1175,9 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
   .event-detail-hero-copy > span { font-size: 14px; }
   .event-detail-actions, .event-detail-actions .button { width: 100%; }
   .event-detail-facts { padding: 27px 21px; }
+  .event-registration-fields, .event-registration-guardian .event-registration-fields { grid-template-columns: 1fr; }
+  .event-registration-form { padding: 24px 18px; border-radius: 22px; }
+  .event-registration-form > .button { width: 100%; }
   .gallery-hero, .gallery-album-hero { padding: 72px 18px 82px; }
   .gallery-hero h1, .gallery-album-hero h1 { font-size: clamp(44px,13vw,60px); }
   .gallery-hero > span, .gallery-album-hero > span { font-size: 14px; }

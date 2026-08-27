@@ -117,6 +117,54 @@ export type EventRecord = {
   updated_at: string;
 };
 
+export type EventParticipantStatus =
+  | "confirmed"
+  | "waitlisted"
+  | "cancelled"
+  | "attended"
+  | "no_show";
+
+export type EventRegistrationRecord = {
+  id: string;
+  event_id: string;
+  participant_first_name: string;
+  participant_last_name: string;
+  birth_date: string;
+  contact_email: string;
+  contact_phone: string;
+  city: string | null;
+  guardian_name: string | null;
+  guardian_email: string | null;
+  guardian_phone: string | null;
+  accessibility_needs: string | null;
+  photo_consent: boolean;
+  privacy_consent_at: string;
+  guardian_consent_at: string | null;
+  status: EventParticipantStatus;
+  admin_notes: string | null;
+  status_updated_at: string;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+};
+
+export type EventRegistrationAudience = "confirmed" | "waitlisted" | "all";
+export type EventMessageDeliveryStatus = "sending" | "sent" | "partial" | "failed";
+
+export type EventRegistrationMessage = {
+  id: string;
+  event_id: string;
+  audience: EventRegistrationAudience;
+  subject: string;
+  body: string;
+  recipient_count: number;
+  delivered_count: number;
+  failed_count: number;
+  delivery_status: EventMessageDeliveryStatus;
+  sent_at: string;
+  sent_by: string;
+};
+
 export type GalleryMediaType = "photo" | "video";
 
 export type GalleryMedia = {

@@ -179,7 +179,9 @@
 .admin-event-list article > div { display: grid; gap: 4px; }
 .admin-event-list article strong { font-size: 12px; }
 .admin-event-list article div > span, .admin-event-list time { color: var(--admin-muted); font-size: 10px; line-height: 1.45; }
-.admin-event-list article > a { color: var(--admin-pink); font-size: 10px; font-weight: 800; }
+.admin-event-list article > a, .admin-event-actions a { color: var(--admin-pink); font-size: 10px; font-weight: 800; }
+.admin-event-actions { display: flex !important; align-items: center; gap: 9px !important; }
+.admin-event-actions a:first-child { padding: 6px 8px; border-radius: 7px; background: #fff0f8; }
 .admin-badge { display: inline-flex; width: fit-content; padding: 6px 9px; border-radius: 999px; font-size: 8px; font-weight: 850; text-transform: uppercase; }
 .publication-published, .registration-open { background: #eaf8ee; color: #247a3e; }
 .publication-draft, .registration-coming_soon { background: #fff3e8; color: #a54f00; }
@@ -239,6 +241,54 @@
 .admin-request-followup { grid-column: 1 / -1; display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 16px; padding-top: 20px; border-top: 1px solid var(--admin-line); }
 .admin-request-followup .admin-entry-actions { grid-column: 1 / -1; margin-top: 0; }
 
+/* Inscriptions aux événements */
+.admin-registrations-page { width: min(100% - 56px,1480px); }
+.admin-registration-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-bottom: 24px; }
+.admin-registration-stats article { display: grid; min-height: 142px; padding: 23px; border: 1px solid var(--admin-line); border-radius: 18px; background: #fff; box-shadow: 0 10px 30px rgba(21,36,68,.04); }
+.admin-registration-stats span { color: var(--admin-muted); font-size: 10px; font-weight: 750; }
+.admin-registration-stats strong { align-self: end; font-family: Montserrat,sans-serif; font-size: 36px; letter-spacing: -.05em; }
+.admin-registration-stats small { margin-top: 5px; color: var(--admin-pink); font-size: 9px; font-weight: 700; }
+.admin-registration-panel, .admin-participant-message-card, .admin-message-history { margin-top: 24px; }
+.admin-registration-panel .admin-panel-heading > span { color: var(--admin-muted); font-size: 10px; }
+.admin-registration-table-wrap { margin: 24px -28px -28px; overflow-x: auto; }
+.admin-registration-table { width: 100%; min-width: 1120px; border-collapse: collapse; }
+.admin-registration-table th { padding: 12px 16px; border-top: 1px solid var(--admin-line); border-bottom: 1px solid var(--admin-line); background: #f8f9fc; color: #7b8495; font-size: 8px; font-weight: 850; letter-spacing: .08em; text-align: left; text-transform: uppercase; }
+.admin-registration-table td { min-width: 145px; padding: 18px 16px; border-bottom: 1px solid #edf0f5; vertical-align: top; font-size: 10px; }
+.admin-registration-table tbody tr:last-child td { border-bottom: 0; }
+.admin-registration-table td:first-child { min-width: 220px; }
+.admin-registration-table td:last-child { min-width: 215px; }
+.admin-registration-table td > strong, .admin-registration-table td > a, .admin-registration-table td > span, .admin-registration-table td > small { display: block; margin-bottom: 5px; overflow-wrap: anywhere; }
+.admin-registration-table td > span, .admin-registration-table td > small { color: var(--admin-muted); }
+.admin-registration-table td > a { color: var(--admin-pink); }
+.admin-registration-table details { margin-top: 9px; }
+.admin-registration-table summary { color: var(--admin-pink); font-size: 9px; font-weight: 750; cursor: pointer; }
+.admin-registration-table details p { max-width: 260px; margin: 7px 0 0; color: var(--admin-muted); font-size: 9px; line-height: 1.55; white-space: pre-wrap; }
+.participant-confirmed, .participant-attended { background: #eaf8ee; color: #247a3e; }
+.participant-waitlisted { background: #fff3e8; color: #a54f00; }
+.participant-cancelled, .participant-no_show { background: #eef1f6; color: #596274; }
+.admin-registration-actions { display: grid; gap: 7px; }
+.admin-registration-actions > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.admin-registration-actions button { min-height: 31px; padding: 0 9px; border: 1px solid #cfd5e1; border-radius: 8px; background: #fff; color: var(--admin-navy); font: 750 8px Poppins,sans-serif; cursor: pointer; }
+.admin-registration-actions button:hover { border-color: var(--admin-pink); color: var(--admin-pink); }
+.admin-registration-actions button.is-danger { border-color: #f2c7c3; color: #b42318; }
+.admin-registration-actions button:disabled { cursor: wait; opacity: .55; }
+.admin-registration-actions small { font-size: 8px; line-height: 1.45; }
+.admin-registration-actions small.is-error { color: #b42318; }
+.admin-registration-actions small.is-success { color: var(--admin-green); }
+.admin-registration-no-action { color: var(--admin-muted); font-size: 9px; }
+.admin-participant-message-card .admin-form { gap: 0; }
+.admin-participant-message-form .admin-form-actions { position: static; margin-top: 22px; box-shadow: none; }
+.admin-message-list { display: grid; gap: 12px; margin-top: 24px; }
+.admin-message-list article { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px 20px; padding: 18px; border: 1px solid var(--admin-line); border-radius: 14px; background: #fafbfe; }
+.admin-message-list article > div { display: grid; gap: 4px; }
+.admin-message-list strong { font-size: 11px; }
+.admin-message-list span, .admin-message-list small { color: var(--admin-muted); font-size: 8px; }
+.admin-message-list p { grid-column: 1 / -1; max-height: 110px; margin: 0; overflow: auto; color: var(--admin-muted); font-size: 9px; line-height: 1.6; white-space: pre-wrap; }
+.admin-message-list small { align-self: start; padding: 6px 8px; border-radius: 999px; background: #eef1f6; }
+.admin-message-list .delivery-sent { background: #eaf8ee; color: #247a3e; }
+.admin-message-list .delivery-partial { background: #fff3e8; color: #a54f00; }
+.admin-message-list .delivery-failed { background: #fff0f0; color: #b42318; }
+
 .admin-login-page { display: grid; grid-template-columns: minmax(420px,1.05fr) minmax(420px,.95fr); background: #fff; }
 .admin-login-panel { position: relative; display: flex; min-height: 100vh; flex-direction: column; justify-content: space-between; padding: 42px 56px 60px; overflow: hidden; background: var(--admin-navy); color: #fff; }
 .admin-login-panel::before { content: ""; position: absolute; width: 520px; height: 520px; right: -250px; top: 18%; border: 70px solid rgba(230,0,126,.18); border-radius: 50%; }
@@ -269,11 +319,13 @@
   .admin-event-list-heading { display: none; }
   .admin-event-list article { grid-template-columns: 1fr auto; gap: 10px 18px; }
   .admin-event-list article > div { grid-column: 1 / -1; }
+  .admin-event-list article > .admin-event-actions { grid-column: auto; justify-self: end; }
   .admin-event-list article > a { justify-self: end; }
   .admin-danger-zone { grid-template-columns: 1fr; }
   .admin-login-panel { padding-inline: 36px; }
   .admin-gallery-album-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .admin-gallery-media-item { grid-template-columns: 190px minmax(0,1fr); }
+  .admin-registrations-page { width: min(100% - 44px,1180px); }
 }
 
 @media (max-width: 760px) {
@@ -288,6 +340,7 @@
   .admin-page-header { align-items: flex-start; flex-direction: column; margin-bottom: 28px; }
   .admin-page-header h1 { font-size: 34px; }
   .admin-stats { grid-template-columns: 1fr; }
+  .admin-registration-stats { grid-template-columns: 1fr; }
   .admin-stats article { min-height: 135px; }
   .admin-next-event-content { grid-template-columns: 1fr; }
   .admin-date-block { width: fit-content; border-right: 0; }
@@ -323,6 +376,8 @@
   .admin-link-hub-note { grid-template-columns: 1fr; }
   .admin-link-hub-note span, .admin-link-hub-note a { grid-column: 1; grid-row: auto; }
   .admin-link-hub-options { grid-template-columns: 1fr; }
+  .admin-message-list article { grid-template-columns: 1fr; }
+  .admin-message-list p { grid-column: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
