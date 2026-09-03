@@ -2,10 +2,34 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import ts from "typescript";
+import jsQR from "jsqr";
+import { PNG } from "pngjs";
 import { customFormSchema, validateCustomAnswers, slugifyFormTitle, questionTypes } from "../src/lib/custom-forms.ts";
+import { createFormQrCode, getFormShareUrl } from "../src/lib/form-qr-code.ts";
 
 const question = (type, index = 1) => ({ id: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`, label: type, help_text: "", type, required: true, options: type.includes("choice") ? ["Oui", "Non"] : [] });
 const form = { title: "Questionnaire", slug: "questionnaire", description: "", confirmation_message: "Merci !", status: "published", questions: [question("short_text")] };
+
+test("downloadable QR codes decode to the exact public sharing URL", async () => {
+  for (const slug of ["atelier-octobre", "formulaire-" + "a".repeat(89)]) {
+    const shareUrl = getFormShareUrl("https://vieavenir.fr/", slug);
+    assert.equal(shareUrl, `https://vieavenir.fr/formulaires/${slug}`);
+    const dataUrl = await createFormQrCode(shareUrl);
+    assert.ok(dataUrl.startsWith("data:image/png;base64,"));
+    const png = PNG.sync.read(Buffer.from(dataUrl.split(",")[1], "base64"));
+    assert.equal(png.width, 1024);
+    assert.equal(png.height, 1024);
+    assert.deepEqual([...png.data.subarray(0, 4)], [255, 255, 255, 255]);
+    const decoded = jsQR(new Uint8ClampedArray(png.data), png.width, png.height);
+    assert.equal(decoded?.data, shareUrl);
+  }
+});
+
+test("each saved form address produces its own QR code", async () => {
+  const first = getFormShareUrl("https://vieavenir.fr", "atelier-a");
+  const second = getFormShareUrl("https://vieavenir.fr", "atelier-b");
+  assert.notEqual(await createFormQrCode(first), await createFormQrCode(second));
+});
 
 test("drafts can be empty, published forms cannot; IDs and choices stay unique", () => {
   assert.equal(customFormSchema.safeParse(form).success, true);
