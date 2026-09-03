@@ -1,10 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 import { getPublicCustomForm } from "@/lib/custom-form-data";
 import { validateCustomAnswers, type CustomFormActionState } from "@/lib/custom-forms";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { scheduleCustomFormNotification } from "@/lib/custom-form-notification";
+import { sendResendEmail } from "@/lib/resend-email";
+import { getSiteUrl } from "@/lib/site";
 
 export async function submitCustomForm(slug: string, _previousState: CustomFormActionState, formData: FormData): Promise<CustomFormActionState> {
   if (formData.get("website")) return { status: "error", message: "L’envoi n’a pas pu être validé." };
@@ -32,6 +36,10 @@ export async function submitCustomForm(slug: string, _previousState: CustomFormA
     }
     revalidatePath(`/admin/formulaires/${form.id}/reponses`);
     revalidatePath("/admin/formulaires");
+    scheduleCustomFormNotification({
+      enabled: form.notify_on_response, isNewResponse: !error,
+      formId: form.id, formTitle: form.title, submissionId: submissionId.data, siteUrl: getSiteUrl(),
+    }, after, sendResendEmail, (reason) => console.error("Notification de formulaire non envoyée", reason));
     return { status: "success", message: form.confirmation_message };
   } catch {
     return { status: "error", message: "Le service est momentanément indisponible. Vos réponses restent affichées ; réessayez." };

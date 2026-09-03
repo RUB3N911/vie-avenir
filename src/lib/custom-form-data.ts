@@ -29,7 +29,7 @@ export const getPublicCustomForm = cache(async (slug: string): Promise<CustomFor
   const supabase = await createSupabaseServerClient();
   if (!supabase) throw new Error("Le service de formulaires est indisponible.");
   const { data, error } = await supabase.from("custom_forms")
-    .select("id,title,slug,description,confirmation_message,status,questions,revision,created_at,updated_at")
+    .select("id,title,slug,description,confirmation_message,status,questions,blocks,notify_on_response,revision,created_at,updated_at")
     .eq("slug", slug).in("status", ["published", "closed"]).maybeSingle();
   if (error) throw new Error("Impossible de charger ce formulaire.");
   return data as CustomForm | null;
