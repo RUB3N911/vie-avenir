@@ -4,6 +4,8 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getCustomFormForAdmin } from "@/lib/custom-form-data";
 import { CustomFormEditor } from "@/components/admin/custom-form-editor";
+import { CustomFormShare } from "@/components/admin/custom-form-share";
+import { getFormShareUrl } from "@/lib/form-qr-code";
 import { getSiteUrl } from "@/lib/site";
 
 export default async function EditCustomFormPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ created?: string }> }) {
@@ -15,7 +17,7 @@ export default async function EditCustomFormPage({ params, searchParams }: { par
   const { created } = await searchParams;
   return <main className="admin-page admin-editor-page custom-forms-admin"><Link className="admin-breadcrumb" href="/admin/formulaires">← Formulaires</Link><header className="admin-page-header"><div><p className="admin-eyebrow">Édition</p><h1>{form.title}</h1></div><Link className="admin-primary-button" href={`/admin/formulaires/${id}/reponses`}>Voir les réponses</Link></header>
     {created ? <p className="admin-page-notice" role="status">Le formulaire a été créé.</p> : null}
-    {form.status !== "draft" ? <aside className="custom-form-share"><strong>Lien à partager</strong><a href={`/formulaires/${form.slug}`} target="_blank" rel="noreferrer">{getSiteUrl()}/formulaires/{form.slug} ↗</a><small>Copiez ce lien dans un message ou ajoutez-le à votre page de liens.</small></aside> : null}
+    <CustomFormShare form={form} shareUrl={getFormShareUrl(getSiteUrl(), form.slug)} />
     <CustomFormEditor form={form} />
   </main>;
 }
