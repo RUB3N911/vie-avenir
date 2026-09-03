@@ -16,6 +16,54 @@
 .admin-app * { box-sizing: border-box; }
 .admin-app a, .admin-login-page a { color: inherit; text-decoration: none; }
 
+/* Créateur de formulaires : étend les composants de l’administration. */
+.custom-forms-admin .admin-field > span, .custom-forms-admin .admin-switch-field,
+.custom-forms-admin .admin-primary-button, .custom-forms-admin .admin-preview-link,
+.custom-forms-admin .admin-page-header > div > span, .custom-forms-admin .admin-form-message { font-size: .875rem; }
+.custom-forms-admin .admin-field input, .custom-forms-admin .admin-field textarea,
+.custom-forms-admin .admin-field select { font-size: 1rem; }
+.custom-forms-admin .admin-field-note, .custom-forms-admin .admin-form-card-heading p { font-size: .8rem; }
+.custom-forms-admin h1, .custom-forms-admin h2 { overflow-wrap: anywhere; }
+.custom-forms-admin h1 small, .custom-forms-admin h2 small { font-size: .65em; }
+.custom-form-editor-fields { display: grid; gap: 24px; min-width: 0; border: 0; padding: 0; margin: 0; }
+.custom-form-slug { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.custom-form-slug > span { color: var(--admin-muted); font-size: .875rem; }
+.custom-form-slug input { min-width: 0; }
+.custom-question-list { display: grid; gap: 20px; }
+.custom-question-card { border: 1px solid var(--admin-line); border-radius: 14px; padding: 20px; background: #fafbfe; }
+.custom-question-card > header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; font-size: .95rem; }
+.custom-question-tools { display: flex; gap: 6px; }
+.custom-question-tools button, .custom-form-add-button { min-height: 44px; min-width: 44px; padding: 8px 14px; border: 1px solid var(--admin-line); border-radius: 9px; background: #fff; color: var(--admin-navy); font: inherit; font-size: .875rem; cursor: pointer; }
+.custom-question-tools button:disabled, .custom-form-add-button:disabled { opacity: .4; cursor: not-allowed; }
+.custom-question-tools button:focus-visible, .custom-form-add-button:focus-visible { outline: 3px solid #e6007e40; outline-offset: 2px; }
+.custom-form-add-button { width: 100%; margin-top: 20px; border-style: dashed; color: #b50062; font-weight: 600; background: #fff5fa; }
+.custom-forms-admin .custom-form-hint { font-size: .875rem; color: var(--admin-muted); line-height: 1.6; }
+.custom-form-share { display: grid; gap: 9px; padding: 20px 24px; margin-bottom: 24px; border: 1px solid #eac8dc; border-radius: 14px; background: #fff5fa; overflow-wrap: anywhere; }
+.custom-form-share a { color: #b50062; font-size: .95rem; text-decoration: underline; }
+.custom-form-share small { color: var(--admin-muted); font-size: .8rem; }
+.custom-form-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.custom-form-cards h2 { font-size: 1.3rem; margin: 16px 0 8px; }
+.custom-form-cards p { color: var(--admin-muted); font-size: .9rem; }
+.custom-form-card-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+.custom-form-card-actions a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 13px; background: #f4f6fb; border-radius: 8px; font-size: .875rem; font-weight: 600; }
+.custom-responses { display: grid; gap: 16px; }
+.custom-responses summary { cursor: pointer; font-size: 1rem; }
+.custom-responses summary small { display: block; margin: 8px 0 0 18px; color: var(--admin-muted); font-size: .8rem; }
+.custom-responses dl { display: grid; gap: 18px; margin: 24px 0 0; }
+.custom-responses dl > div { padding-top: 16px; border-top: 1px solid var(--admin-line); }
+.custom-responses dt { font-size: .875rem; font-weight: 700; overflow-wrap: anywhere; }
+.custom-responses dd { margin: 7px 0 0; color: #475467; font-size: 1rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.custom-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 20px; margin-top: 26px; font-size: .875rem; }
+.custom-pagination a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; }
+@media (max-width: 780px) {
+  .custom-form-cards { grid-template-columns: 1fr; }
+  .custom-forms-admin .admin-form-card { padding: 20px; }
+  .custom-question-card { padding: 16px; }
+  .custom-forms-admin .admin-form-actions { flex-wrap: wrap; }
+  .custom-forms-admin .admin-form-message { width: 100%; }
+  .custom-form-slug { flex-direction: column; align-items: stretch; }
+}
+
 .admin-sidebar {
   position: fixed;
   inset: 0 auto 0 0;
@@ -31,7 +79,7 @@
 .admin-brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
 .admin-brand img { width: 74px; height: auto; filter: brightness(0) invert(1); }
 .admin-brand span { font-family: Montserrat, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-.admin-nav { display: grid; gap: 8px; margin-top: 34px; }
+.admin-nav { display: grid; gap: 8px; margin-top: 34px; overflow-y: auto; min-height: 0; }
 .admin-nav a { display: flex; align-items: center; gap: 13px; padding: 13px 14px; border-radius: 12px; color: rgba(255,255,255,.68); font-size: 13px; font-weight: 650; transition: .2s ease; }
 .admin-nav a:hover, .admin-nav a:focus-visible { background: rgba(255,255,255,.09); color: #fff; }
 .admin-nav a.is-active { background: #fff; color: var(--admin-navy); }
