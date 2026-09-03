@@ -43,7 +43,7 @@ export const contactJourneys: Record<ContactProfile, {
   partner: {
     title: "Je représente un partenaire",
     cardTitle: "Vous représentez une structure",
-    description: "Imaginer un partenariat, accueillir ou soutenir une action.",
+    description: "Imaginer un partenariat, accueillir ou soutenir notre action.",
     formTitle: "Construisons une action utile ensemble.",
     messageLabel: "Votre projet ou proposition",
     messagePlaceholder: "Présentez votre structure, votre idée, vos moyens ou le territoire concerné…",
