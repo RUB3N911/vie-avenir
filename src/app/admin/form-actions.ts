@@ -12,10 +12,13 @@ export async function saveCustomForm(formId: string | null, _previousState: Cust
   const admin = await requireAdmin();
   if (formId && !z.uuid().safeParse(formId).success) return { status: "error", message: "Formulaire introuvable." };
   const rawQuestions = formData.get("questions");
+  const rawBlocks = formData.get("blocks");
   if (typeof rawQuestions !== "string" || rawQuestions.length > 150000) return { status: "error", message: "Les questions sont invalides ou trop volumineuses." };
+  if (typeof rawBlocks !== "string" || rawBlocks.length > 20000) return { status: "error", message: "Les blocs sont invalides ou trop volumineux." };
   let questions: unknown;
-  try { questions = JSON.parse(rawQuestions); } catch { return { status: "error", message: "Les questions sont invalides." }; }
-  const parsed = customFormSchema.safeParse({ ...Object.fromEntries(formData), questions });
+  let blocks: unknown;
+  try { questions = JSON.parse(rawQuestions); blocks = JSON.parse(rawBlocks); } catch { return { status: "error", message: "Les questions ou les blocs sont invalides." }; }
+  const parsed = customFormSchema.safeParse({ ...Object.fromEntries(formData), questions, blocks, notify_on_response: formData.get("notify_on_response") === "on" });
   if (!parsed.success) return { status: "error", message: parsed.error.issues[0]?.message ?? "Vérifiez le formulaire." };
   const revision = Number(formData.get("revision"));
   if (formId && (!Number.isInteger(revision) || revision < 1)) return { status: "error", message: "Rechargez le formulaire avant de l’enregistrer." };
