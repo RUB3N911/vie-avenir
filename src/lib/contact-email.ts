@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { ContactProfile } from "@/lib/cms-types";
+import { getProfessionalFollowUp } from "@/lib/professional-followup";
 
 const DEFAULT_NOTIFICATION_EMAIL = "contact@vieavenir.fr";
 const DEFAULT_SITE_URL = "https://vieavenir.fr";
@@ -138,6 +139,7 @@ function acknowledgementHtml(request: ContactEmailRequest) {
        <p style="margin:0 0 7px;color:#687086;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">Votre demande</p>
        <p style="margin:0;color:#0d1b3d;font-size:14px;line-height:1.55;">${escapeHtml(request.requestType)}</p>
      </div>
+     ${getProfessionalFollowUp(request.profile).html}
      <p style="margin:0;color:#687086;font-size:12px;line-height:1.6;">Cet e-mail confirme uniquement la bonne réception de votre message. Vous pouvez y répondre si vous souhaitez apporter une précision.</p>`,
   );
 }
@@ -163,6 +165,7 @@ function notificationText(request: ContactEmailRequest) {
 }
 
 function acknowledgementText(request: ContactEmailRequest) {
+  const followUp = getProfessionalFollowUp(request.profile);
   return [
     `Bonjour ${request.name},`,
     "",
@@ -171,6 +174,7 @@ function acknowledgementText(request: ContactEmailRequest) {
     "",
     `Votre demande : ${request.requestType}`,
     "",
+    ...(followUp.text ? [followUp.text, ""] : []),
     "Cet e-mail confirme uniquement la bonne réception de votre message. Vous pouvez y répondre si vous souhaitez apporter une précision.",
     "",
     "VIE AVENIR · Le Carbet, Martinique",
