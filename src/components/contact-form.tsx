@@ -58,12 +58,13 @@ export function ContactForm({ initialProfile = "young" }: { initialProfile?: Con
           className={`contact-request-options${state.field === "request_types" ? " has-error" : ""}`}
           aria-describedby={state.field === "request_types" ? "contact-request-error" : undefined}
         >
-          <legend>Votre demande <b>*</b><small>Plusieurs choix possibles</small></legend>
+          <legend>Votre demande <b>*</b><small>Vous pouvez sélectionner plusieurs choix</small></legend>
           <div key={profile}>
             {journey.requestOptions.map((option) => (
               <label key={option}>
                 <input name="request_type" type="checkbox" value={option} />
-                <span>{option}</span>
+                <span className="contact-request-check" aria-hidden="true">✓</span>
+                <span className="contact-request-label">{option}</span>
               </label>
             ))}
           </div>

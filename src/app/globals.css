@@ -718,13 +718,18 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
 .contact-form label small { color: var(--ink-soft); font-size: 9px; font-weight: 600; text-transform: none; }
 .contact-form label b { color: var(--pink-text); }
 .contact-request-options { grid-column: 1 / -1; margin: 0; padding: 0; border: 0; }
-.contact-request-options legend { display: flex; gap: 8px; align-items: baseline; margin-bottom: 12px; color: var(--navy); font-size: 11px; font-weight: 850; text-transform: uppercase; }
+.contact-request-options legend { display: flex; flex-wrap: wrap; gap: 5px 8px; align-items: baseline; margin-bottom: 12px; color: var(--navy); font-size: 11px; font-weight: 850; text-transform: uppercase; }
 .contact-request-options legend b { color: var(--pink-text); }
 .contact-request-options legend small { color: var(--ink-soft); font-size: 9px; font-weight: 600; text-transform: none; }
-.contact-request-options > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
-.contact-request-options > div label { display: grid; grid-template-columns: 20px minmax(0,1fr); gap: 10px; align-items: center; min-height: 48px; padding: 10px 12px; border: 1px solid #dbe0ea; border-radius: 12px; background: #f4f6fa; font-size: 10px; font-weight: 650; line-height: 1.4; text-transform: none; cursor: pointer; }
-.contact-request-options > div label:has(input:checked) { border-color: var(--pink); background: #fff0f8; color: var(--pink-text); }
-.contact-request-options input[type="checkbox"] { width: 18px; height: 18px; padding: 0; accent-color: var(--pink); }
+.contact-request-options > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.contact-request-options > div label { position: relative; display: inline-flex; gap: 8px; align-items: center; min-height: 38px; max-width: 100%; padding: 7px 13px 7px 9px; border: 1px solid #dbe0ea; border-radius: 999px; background: #fff; color: var(--navy); font-size: 12px; font-weight: 650; line-height: 1.3; text-transform: none; cursor: pointer; transition: border-color .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.contact-request-options > div label:hover { border-color: #aeb7ca; background: #f8f9fc; transform: translateY(-1px); }
+.contact-request-options > div label:has(input:checked) { border-color: var(--pink); background: #fff0f8; color: var(--pink-text); box-shadow: 0 4px 12px rgba(230,0,126,.09); }
+.contact-request-options input[type="checkbox"] { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.contact-request-check { display: grid; width: 17px; height: 17px; flex: 0 0 17px; place-items: center; border: 1.5px solid #aeb7ca; border-radius: 5px; background: #fff; color: transparent; font-size: 10px; font-weight: 900; line-height: 1; transition: border-color .2s ease, background-color .2s ease, color .2s ease; }
+.contact-request-options input:checked + .contact-request-check { border-color: var(--pink); background: var(--pink); color: #fff; }
+.contact-request-options input:focus-visible + .contact-request-check { outline: 3px solid rgba(230,0,126,.28); outline-offset: 2px; }
+.contact-request-label { min-width: 0; }
 .contact-request-options.has-error > div { padding: 8px; border: 1px solid #cf3328; border-radius: 15px; background: #fff8f7; }
 .contact-request-options .field-error { display: block; margin-top: 8px; color: #a61b12; font-size: 9px; font-weight: 650; text-transform: none; }
 .contact-form .consent-field { flex-direction: row; align-items: flex-start; gap: 12px; margin-top: 15px; font-size: 10px; font-weight: 600; line-height: 1.55; text-transform: none; }
@@ -1190,7 +1195,7 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
   .event-detail-actions, .event-detail-actions .button { width: 100%; }
   .event-detail-facts { padding: 27px 21px; }
   .event-registration-fields, .event-registration-guardian .event-registration-fields { grid-template-columns: 1fr; }
-  .contact-request-options > div { grid-template-columns: 1fr; }
+  .contact-request-options > div label { flex: 1 1 180px; }
   .event-registration-form { padding: 24px 18px; border-radius: 22px; }
   .event-registration-form > .button { width: 100%; }
   .gallery-hero, .gallery-album-hero { padding: 72px 18px 82px; }
