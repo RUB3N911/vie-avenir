@@ -10,6 +10,7 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 export const metadata: Metadata = {
   title: "Nous rejoindre",
   description: "Contactez VIE AVENIR pour participer à un atelier, partager un métier ou construire un partenariat en Martinique.",
+  alternates: { canonical: "/contact" },
 };
 
 export const dynamic = "force-dynamic";

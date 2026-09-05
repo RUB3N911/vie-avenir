@@ -7,6 +7,7 @@ import { formatEventDate, getPublishedGalleryAlbums } from "@/lib/cms-data";
 export const metadata: Metadata = {
   title: "Galerie",
   description: "Découvrez en photos et en vidéos les rencontres, ateliers et moments forts de VIE AVENIR en Martinique.",
+  alternates: { canonical: "/galerie" },
 };
 
 export const dynamic = "force-dynamic";

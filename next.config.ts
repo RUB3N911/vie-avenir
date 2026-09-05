@@ -1,5 +1,19 @@
 import type { NextConfig } from "next";
 
+const canonicalHost = "vieavenir.fr";
+const redirectHosts = [
+  "www.vieavenir.fr",
+  "vie-avenir.fr",
+  "www.vie-avenir.fr",
+  "vie-avenir.com",
+  "www.vie-avenir.com",
+  "vie-avenir.info",
+  "www.vie-avenir.info",
+  "vie-avenir.store",
+  "www.vie-avenir.store",
+  "vie-avenir.vercel.app",
+] as const;
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
@@ -15,6 +29,14 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "6mb",
     },
+  },
+  async redirects() {
+    return redirectHosts.map((host) => ({
+      source: "/:path*",
+      has: [{ type: "host" as const, value: host }],
+      destination: `https://${canonicalHost}/:path*`,
+      permanent: true,
+    }));
   },
   async headers() {
     return [

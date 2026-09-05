@@ -11,7 +11,12 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const form = await getPublicCustomForm(slug);
-  return { title: form?.title ?? "Formulaire", description: form?.description || "Un formulaire VIE AVENIR.", robots: { index: false, follow: false } };
+  return {
+    title: form?.title ?? "Formulaire",
+    description: form?.description || "Un formulaire VIE AVENIR.",
+    alternates: { canonical: `/formulaires/${form?.slug ?? slug}` },
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function PublicCustomFormPage({ params }: { params: Promise<{ slug: string }> }) {

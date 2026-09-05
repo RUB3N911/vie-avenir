@@ -6,6 +6,7 @@ import { formatLegalUpdatedAt, getAssociationSettings, getLegalPage } from "@/li
 export const metadata: Metadata = {
   title: "Mentions légales",
   description: "Informations légales relatives au site de l’association VIE AVENIR.",
+  alternates: { canonical: "/mentions-legales" },
 };
 
 export const dynamic = "force-dynamic";

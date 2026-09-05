@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Arrow, SiteFooter, SiteHeader } from "@/layouts/site-shell";
 import { formatEventDate, getNextPublishedEvent } from "@/lib/cms-data";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const nextEvent = await getNextPublishedEvent();

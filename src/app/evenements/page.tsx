@@ -8,6 +8,7 @@ import { formatEventDate, getPublishedEvents, pickNextEvent } from "@/lib/cms-da
 export const metadata: Metadata = {
   title: "Événements",
   description: "Retrouvez les prochains ateliers et rendez-vous VIE AVENIR pour les jeunes de 14 à 25 ans en Martinique.",
+  alternates: { canonical: "/evenements" },
 };
 
 export const dynamic = "force-dynamic";

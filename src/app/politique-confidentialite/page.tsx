@@ -6,6 +6,7 @@ import { formatLegalUpdatedAt, getAssociationSettings, getLegalPage } from "@/li
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
   description: "Comment VIE AVENIR utilise et protège les données personnelles transmises sur son site.",
+  alternates: { canonical: "/politique-confidentialite" },
 };
 
 export const dynamic = "force-dynamic";
