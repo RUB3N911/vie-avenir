@@ -7,6 +7,7 @@ import { getPublishedPartners } from "@/lib/cms-data";
 export const metadata: Metadata = {
   title: "Partenaires",
   description: "Professionnels, entreprises, collectivités et associations : construisez une action utile avec VIE AVENIR.",
+  alternates: { canonical: "/partenaires" },
 };
 
 const partnerTypes = [

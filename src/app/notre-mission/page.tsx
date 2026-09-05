@@ -7,6 +7,7 @@ import { getAssociationSettings, getPublishedTeamMembers, getPublishedTestimonia
 export const metadata: Metadata = {
   title: "Notre mission",
   description: "Découvrez la mission, la conviction et la façon d’agir de l’association VIE AVENIR en Martinique.",
+  alternates: { canonical: "/notre-mission" },
 };
 
 const reasons = [

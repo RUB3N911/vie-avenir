@@ -5,6 +5,7 @@ import { Callout, SectionLabel, SiteFooter, SiteHeader } from "@/layouts/site-sh
 export const metadata: Metadata = {
   title: "Nos actions",
   description: "Rencontres métiers, ateliers de vie active et Voix de l’Avenir : découvrez les actions concrètes de VIE AVENIR.",
+  alternates: { canonical: "/nos-actions" },
 };
 
 const actions = [
