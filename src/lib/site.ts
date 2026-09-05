@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "VIE AVENIR",
   slogan: "VA ET DEVIENS !",
-  defaultUrl: "https://vieavenir.fr",
+  defaultUrl: "https://www.vieavenir.fr",
   title: "VIE AVENIR — Des rencontres qui changent des trajectoires",
   description:
     "VIE AVENIR connecte les jeunes de 14 à 25 ans en Martinique avec des professionnels inspirants.",

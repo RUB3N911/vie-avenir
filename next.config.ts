@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
-const canonicalHost = "vieavenir.fr";
+const canonicalHost = "www.vieavenir.fr";
 const redirectHosts = [
-  "www.vieavenir.fr",
+  "vieavenir.fr",
   "vie-avenir.fr",
   "www.vie-avenir.fr",
   "vie-avenir.com",
