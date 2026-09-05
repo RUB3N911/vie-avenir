@@ -44,7 +44,7 @@ export type ContactRequestRecord = {
   organization: string | null;
   subject: string;
   message: string;
-  details: Record<string, string>;
+  details: Record<string, string | string[]>;
   status: ContactRequestStatus;
   admin_notes: string | null;
   created_at: string;
