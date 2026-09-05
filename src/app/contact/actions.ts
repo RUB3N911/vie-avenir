@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { z } from "zod";
+import { contactJourneys } from "@/data/contact-journeys";
 import type { ContactProfile } from "@/lib/cms-types";
 import { sendContactRequestEmails } from "@/lib/contact-email";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -27,7 +28,9 @@ const contactSchema = z.object({
   age: optionalAge,
   organization: z.string().trim().max(160),
   role_or_job: z.string().trim().max(160),
-  request_type: z.string().trim().min(2, "Choisissez l’objet de votre demande.").max(160),
+  request_types: z.array(z.string().trim().min(2).max(160))
+    .min(1, "Choisissez au moins un objet pour votre demande.")
+    .max(5, "Vous pouvez sélectionner jusqu’à cinq choix."),
   subject: z.string().trim().min(3, "Ajoutez un objet à votre demande.").max(160),
   message: z.string().trim().min(20, "Votre message doit contenir au moins 20 caractères.").max(5000),
   consent: z.string().refine((value) => value === "on", "Vous devez accepter l’utilisation de vos informations pour recevoir une réponse."),
@@ -49,6 +52,11 @@ const contactSchema = z.object({
   if (value.profile === "partner" && !value.organization) {
     context.addIssue({ code: "custom", path: ["organization"], message: "Indiquez le nom de votre structure." });
   }
+  const allowedRequests = contactJourneys[value.profile].requestOptions;
+  if (new Set(value.request_types).size !== value.request_types.length
+    || value.request_types.some((requestType) => !allowedRequests.includes(requestType))) {
+    context.addIssue({ code: "custom", path: ["request_types"], message: "Un des choix sélectionnés n’est pas valide pour ce parcours." });
+  }
 });
 
 export async function submitContactRequest(
@@ -56,7 +64,10 @@ export async function submitContactRequest(
   formData: FormData,
 ): Promise<ContactActionState> {
   const startedAt = Date.now();
-  const result = contactSchema.safeParse(Object.fromEntries(formData));
+  const result = contactSchema.safeParse({
+    ...Object.fromEntries(formData),
+    request_types: formData.getAll("request_type").map(String),
+  });
   if (!result.success) {
     const issue = result.error.issues[0];
     console.warn(JSON.stringify({
@@ -86,8 +97,10 @@ export async function submitContactRequest(
     return { status: "error", message: "L’envoi est momentanément indisponible." };
   }
 
-  const details: Record<string, string> = {
-    request_type: values.request_type,
+  const requestTypeLabel = values.request_types.join(" · ");
+  const details: Record<string, string | string[]> = {
+    request_type: requestTypeLabel,
+    request_types: values.request_types,
   };
   if (values.role_or_job) details.role_or_job = values.role_or_job;
 
@@ -138,7 +151,7 @@ export async function submitContactRequest(
       age: values.age,
       organization: values.organization || null,
       roleOrJob: values.role_or_job || null,
-      requestType: values.request_type,
+      requestType: requestTypeLabel,
       subject: values.subject,
       message: values.message,
     });

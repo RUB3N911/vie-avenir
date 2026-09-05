@@ -7,6 +7,7 @@ import { PNG } from "pngjs";
 import { customFormSchema, validateCustomAnswers, slugifyFormTitle, questionTypes, defaultFormBlock, groupFormQuestions, flattenFormBlocks, groupResponseQuestions } from "../src/lib/custom-forms.ts";
 import { createFormQrCode, getFormShareUrl } from "../src/lib/form-qr-code.ts";
 import { buildCustomFormNotification, scheduleCustomFormNotification } from "../src/lib/custom-form-notification.ts";
+import { ageOnDate, isMinorOnDate, isValidBirthDate } from "../src/lib/event-registration-validation.ts";
 
 const question = (type, index = 1) => ({ id: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`, label: type, help_text: "", type, required: true, options: type.includes("choice") ? ["Oui", "Non"] : [] });
 const form = { title: "Questionnaire", slug: "questionnaire", description: "", confirmation_message: "Merci !", status: "published", questions: [question("short_text")] };
@@ -168,4 +169,21 @@ test("server action modules export async functions only (registration regression
       assert.ok(ts.isFunctionDeclaration(statement) && statement.modifiers.some((modifier) => modifier.kind === ts.SyntaxKind.AsyncKeyword), path);
     }
   }
+});
+
+test("event age is calculated on the event date and only minors need the guardian section", () => {
+  const eventDate = "2026-10-03T14:00:00.000Z";
+  assert.equal(ageOnDate("2008-10-04", eventDate), 17);
+  assert.equal(isMinorOnDate("2008-10-04", eventDate), true);
+  assert.equal(ageOnDate("2008-10-03", eventDate), 18);
+  assert.equal(isMinorOnDate("2008-10-03", eventDate), false);
+  assert.equal(ageOnDate("2008-02-30", eventDate), null);
+  assert.equal(isMinorOnDate("", eventDate), false);
+});
+
+test("birth dates reject impossible and future dates", () => {
+  assert.equal(isValidBirthDate("2008-02-29"), true);
+  assert.equal(isValidBirthDate("2008-02-30"), false);
+  assert.equal(isValidBirthDate("2099-01-01"), false);
+  assert.equal(isValidBirthDate("incorrect"), false);
 });

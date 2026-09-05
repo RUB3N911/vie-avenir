@@ -717,6 +717,16 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
 .journey-form-heading h3 { margin: 6px 0 0; font-size: 22px; line-height: 1.2; }
 .contact-form label small { color: var(--ink-soft); font-size: 9px; font-weight: 600; text-transform: none; }
 .contact-form label b { color: var(--pink-text); }
+.contact-request-options { grid-column: 1 / -1; margin: 0; padding: 0; border: 0; }
+.contact-request-options legend { display: flex; gap: 8px; align-items: baseline; margin-bottom: 12px; color: var(--navy); font-size: 11px; font-weight: 850; text-transform: uppercase; }
+.contact-request-options legend b { color: var(--pink-text); }
+.contact-request-options legend small { color: var(--ink-soft); font-size: 9px; font-weight: 600; text-transform: none; }
+.contact-request-options > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+.contact-request-options > div label { display: grid; grid-template-columns: 20px minmax(0,1fr); gap: 10px; align-items: center; min-height: 48px; padding: 10px 12px; border: 1px solid #dbe0ea; border-radius: 12px; background: #f4f6fa; font-size: 10px; font-weight: 650; line-height: 1.4; text-transform: none; cursor: pointer; }
+.contact-request-options > div label:has(input:checked) { border-color: var(--pink); background: #fff0f8; color: var(--pink-text); }
+.contact-request-options input[type="checkbox"] { width: 18px; height: 18px; padding: 0; accent-color: var(--pink); }
+.contact-request-options.has-error > div { padding: 8px; border: 1px solid #cf3328; border-radius: 15px; background: #fff8f7; }
+.contact-request-options .field-error { display: block; margin-top: 8px; color: #a61b12; font-size: 9px; font-weight: 650; text-transform: none; }
 .contact-form .consent-field { flex-direction: row; align-items: flex-start; gap: 12px; margin-top: 15px; font-size: 10px; font-weight: 600; line-height: 1.55; text-transform: none; }
 .contact-form .consent-field input { width: 18px; height: 18px; flex: 0 0 auto; margin-top: 1px; padding: 0; }
 .contact-form .consent-field + .button { margin-top: 28px; }
@@ -1086,6 +1096,8 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
 .event-registration-form input, .event-registration-form textarea { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid #d7dce6; border-radius: 11px; background: #fff; color: var(--navy); font: 500 11px Poppins,sans-serif; transition: border-color .2s ease,box-shadow .2s ease; }
 .event-registration-form textarea { min-height: 95px; resize: vertical; }
 .event-registration-form input:focus, .event-registration-form textarea:focus { border-color: var(--pink-action); outline: 0; box-shadow: 0 0 0 3px rgba(230,0,126,.1); }
+.event-registration-form input.is-invalid, .event-registration-form textarea.is-invalid { border-color: #c92a20; background: #fff9f8; box-shadow: 0 0 0 3px rgba(201,42,32,.08); }
+.event-registration-field-error { display: block; grid-column: 1 / -1; color: #a61b12; font-size: 8px; font-weight: 650; line-height: 1.5; }
 .event-registration-guardian { margin: 0; padding: 22px; border: 1px solid #e6e9ef; border-radius: 18px; background: #fafbfe; }
 .event-registration-guardian legend { padding: 0 7px; color: var(--pink-text); text-transform: uppercase; }
 .event-registration-guardian > p { margin: 0 0 18px; color: var(--ink-soft); font-size: 9px; line-height: 1.55; }
@@ -1098,7 +1110,9 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
 .event-registration-form > .button:disabled { cursor: wait; opacity: .65; }
 .event-registration-form > small { color: var(--ink-soft); font-size: 8px; }
 .event-registration-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-.event-registration-error { margin: 0; padding: 13px 15px; border: 1px solid #f0c5c1; border-radius: 11px; background: #fff5f4; color: #a61b12; font-size: 10px; line-height: 1.55; }
+.event-registration-error { margin: 0; padding: 13px 15px; border: 1px solid #f0c5c1; border-radius: 11px; outline: none; background: #fff5f4; color: #a61b12; font-size: 10px; line-height: 1.55; }
+.event-registration-error strong { display: block; margin-bottom: 3px; font-size: 11px; }
+.event-registration-error p { margin: 0; }
 .event-registration-result { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 18px; align-items: start; padding: 34px; border: 1px solid #bde3c7; border-radius: 24px; background: #fff; box-shadow: 0 22px 60px rgba(13,27,61,.09); }
 .event-registration-result > span { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 50%; background: #eaf8ee; color: #247a3e; font-size: 20px; font-weight: 900; }
 .event-registration-result.is-waitlisted { border-color: #f0d7b6; }
@@ -1176,6 +1190,7 @@ footer { display: grid; grid-template-columns: 180px minmax(160px, 1fr) minmax(3
   .event-detail-actions, .event-detail-actions .button { width: 100%; }
   .event-detail-facts { padding: 27px 21px; }
   .event-registration-fields, .event-registration-guardian .event-registration-fields { grid-template-columns: 1fr; }
+  .contact-request-options > div { grid-template-columns: 1fr; }
   .event-registration-form { padding: 24px 18px; border-radius: 22px; }
   .event-registration-form > .button { width: 100%; }
   .gallery-hero, .gallery-album-hero { padding: 72px 18px 82px; }

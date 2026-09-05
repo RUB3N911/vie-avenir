@@ -54,7 +54,21 @@ export function ContactForm({ initialProfile = "young" }: { initialProfile?: Con
         {!isYoung ? <label>Téléphone <small>— facultatif</small><input name="phone" type="tel" autoComplete="tel" placeholder="Votre réponse" /></label> : <input type="hidden" name="phone" value="" />}
         {(profile === "professional" || profile === "partner") ? <label>Structure {profile === "partner" ? <b>*</b> : <small>— facultatif</small>}<input name="organization" autoComplete="organization" required={profile === "partner"} placeholder="Nom de la structure" maxLength={160} /></label> : <input type="hidden" name="organization" value="" />}
         {profile === "professional" ? <label>Métier ou fonction <b>*</b><input name="role_or_job" required placeholder="Votre métier / fonction" maxLength={160} /></label> : <input type="hidden" name="role_or_job" value="" />}
-        <label>Votre demande<select name="request_type" defaultValue="" required><option value="" disabled>Choisir une option</option>{journey.requestOptions.map((option) => <option key={option}>{option}</option>)}</select></label>
+        <fieldset
+          className={`contact-request-options${state.field === "request_types" ? " has-error" : ""}`}
+          aria-describedby={state.field === "request_types" ? "contact-request-error" : undefined}
+        >
+          <legend>Votre demande <b>*</b><small>Plusieurs choix possibles</small></legend>
+          <div key={profile}>
+            {journey.requestOptions.map((option) => (
+              <label key={option}>
+                <input name="request_type" type="checkbox" value={option} />
+                <span>{option}</span>
+              </label>
+            ))}
+          </div>
+          {state.field === "request_types" ? <small className="field-error" id="contact-request-error">{state.message}</small> : null}
+        </fieldset>
         <label>Objet<input name="subject" type="text" placeholder="En quelques mots" minLength={3} maxLength={160} required /></label>
       </div>
 
