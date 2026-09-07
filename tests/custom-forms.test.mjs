@@ -162,7 +162,7 @@ test("duplicate choices and oversized answers are rejected; slugs are safe", () 
 });
 
 test("server action modules export async functions only (registration regression)", () => {
-  for (const path of ["src/app/admin/form-actions.ts", "src/app/formulaires/[slug]/actions.ts", "src/app/evenements/[slug]/registration-actions.ts"]) {
+  for (const path of ["src/app/admin/form-actions.ts", "src/app/admin/contact-reply-actions.ts", "src/app/formulaires/[slug]/actions.ts", "src/app/evenements/[slug]/registration-actions.ts"]) {
     const source = ts.createSourceFile(path, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true);
     for (const statement of source.statements) {
       if (!statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) continue;
