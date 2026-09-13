@@ -51,6 +51,20 @@ export type ContactRequestRecord = {
   updated_at: string;
 };
 
+export type ContactReplyTemplateRecord = {
+  id: string;
+  profile: ContactProfile;
+  label: string;
+  subject: string;
+  heading: string;
+  body: string;
+  cta_label: string | null;
+  cta_url: string | null;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
 export type SitePresentation = {
   story_title: string | null;
   story_body: string | null;

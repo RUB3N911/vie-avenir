@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { ContactReplyForm } from "@/components/admin/contact-reply-form";
+import { ContactReplyTemplateManager } from "@/components/admin/contact-reply-template-manager";
 import { ContactRequestForm } from "@/components/admin/contact-request-form";
 import { contactJourneys } from "@/data/contact-journeys";
 import { requireAdmin } from "@/lib/admin-auth";
-import { getContactRequestsForAdmin } from "@/lib/cms-data";
+import { getContactReplyTemplatesForAdmin, getContactRequestsForAdmin } from "@/lib/cms-data";
 import { hasResendConfiguration } from "@/lib/resend-email";
 
 const statusLabels = {
@@ -15,7 +16,10 @@ const statusLabels = {
 
 export default async function ContactRequestsAdminPage() {
   await requireAdmin();
-  const requests = await getContactRequestsForAdmin();
+  const [requests, replyTemplates] = await Promise.all([
+    getContactRequestsForAdmin(),
+    getContactReplyTemplatesForAdmin(),
+  ]);
   const emailConfigured = hasResendConfiguration();
 
   return (
@@ -27,6 +31,7 @@ export default async function ContactRequestsAdminPage() {
           <span>Consultez chaque demande, répondez avec un message adapté au profil et conservez vos notes de suivi en interne.</span>
         </div>
       </header>
+      <ContactReplyTemplateManager templates={replyTemplates} />
       <section className="admin-request-list">
         {requests.length ? requests.map((request) => {
           const savedRequestTypes = request.details.request_types;
@@ -64,8 +69,10 @@ export default async function ContactRequestsAdminPage() {
                   requestId={request.id}
                   replyToken={randomUUID()}
                   profile={request.profile}
+                  requestSubject={request.subject}
                   recipientEmail={request.email}
                   emailConfigured={emailConfigured}
+                  templates={replyTemplates.filter((template) => template.profile === request.profile)}
                 />
                 <ContactRequestForm request={request} />
               </div>
