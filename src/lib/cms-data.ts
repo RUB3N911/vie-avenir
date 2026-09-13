@@ -8,6 +8,7 @@ import { defaultLinkHubLinks } from "@/data/link-hub-defaults";
 import type {
   AssociationSettings,
   ConfirmedPartner,
+  ContactReplyTemplateRecord,
   ContactRequestRecord,
   EventRecord,
   EventRegistrationMessage,
@@ -452,6 +453,19 @@ export async function getContactRequestsForAdmin(): Promise<ContactRequestRecord
   const { data, error } = await supabase.from("contact_requests").select("*").order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return (data ?? []) as ContactRequestRecord[];
+}
+
+export async function getContactReplyTemplatesForAdmin(): Promise<ContactReplyTemplateRecord[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("contact_reply_templates")
+    .select("*")
+    .order("profile")
+    .order("display_order")
+    .order("created_at");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as ContactReplyTemplateRecord[];
 }
 
 export function formatEventDate(date: string) {

@@ -1,8 +1,13 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { buildContactReplyEmail } from "../src/lib/contact-reply-email.ts";
-import { contactReplyTemplates, getContactReplyTemplate } from "../src/lib/contact-reply-templates.ts";
 import { getProfessionalFollowUp, professionalInterventionFormUrl } from "../src/lib/professional-followup.ts";
+
+const templateMigration = readFileSync(
+  new URL("../supabase/migrations/20260913111249_manage_contact_reply_templates.sql", import.meta.url),
+  "utf8",
+);
 
 test("professional acknowledgements include the exact supplied form URL in HTML and plain text", () => {
   const expected = "https://www.vieavenir.fr/formulaires/devenez-une-voix-de-l-avenir-avec-l-association-vie-avenir";
@@ -21,20 +26,20 @@ for (const profile of ["young", "parent", "partner"]) {
   });
 }
 
-test("admin replies offer profile-specific templates and the professional form CTA", () => {
+test("reply templates are stored in an admin-only table with all initial profiles", () => {
+  assert.match(templateMigration, /create table public\.contact_reply_templates/);
+  assert.match(templateMigration, /enable row level security/);
+  assert.match(templateMigration, /for select to authenticated[\s\S]*private\.is_admin/);
+  assert.match(templateMigration, /revoke all privileges on public\.contact_reply_templates from public, anon, authenticated/);
+  assert.doesNotMatch(templateMigration, /grant select[^;]+to anon/);
   for (const profile of ["young", "parent", "professional", "partner"]) {
-    assert.ok(contactReplyTemplates[profile].length >= 2, profile);
-    assert.ok(contactReplyTemplates[profile].every((template) => template.profile === profile));
+    assert.ok(templateMigration.includes(`'${profile}'`), profile);
   }
-
-  const professional = getContactReplyTemplate("professional", "professional-intervention");
-  assert.equal(professional?.cta?.url, professionalInterventionFormUrl);
-  assert.equal(getContactReplyTemplate("young", "professional-intervention"), null);
+  assert.ok(templateMigration.includes(professionalInterventionFormUrl));
 });
 
 test("admin reply email follows the brand, escapes edited content and replies to contact", () => {
-  const professional = getContactReplyTemplate("professional", "professional-intervention");
-  assert.ok(professional?.cta);
+  const cta = { label: "Compléter le formulaire", url: professionalInterventionFormUrl };
   const email = buildContactReplyEmail({
     requestId: "00000000-0000-4000-8000-000000000001",
     replyToken: "00000000-0000-4000-8000-000000000002",
@@ -44,7 +49,7 @@ test("admin reply email follows the brand, escapes edited content and replies to
     subject: "Préparons votre intervention",
     heading: "Un titre <important>",
     body: "Une première ligne & la suite\nDeuxième ligne",
-    cta: professional.cta,
+    cta,
   });
 
   assert.equal(email.to, "marie@example.com");
